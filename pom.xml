@@ -9,9 +9,11 @@
 		<version>2.3.1.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-
+	<groupId>com.github.mahmoudashraf</groupId>
 	<artifactId>consul-leader-election</artifactId>
 	<name>consul-leader-election</name>
+	
+
 
 	<properties>
 		<java.version>1.13</java.version>
