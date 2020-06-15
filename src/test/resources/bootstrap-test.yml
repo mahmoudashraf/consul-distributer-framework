@@ -1,0 +1,15 @@
+spring:  
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: localhostrrr
+        
+logging:
+  level:
+    pl.piomin.services.customer.*: TRACE
+  pattern:
+    console: d{} - %msg%n
+    
+server.port: 0
