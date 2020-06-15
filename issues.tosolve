@@ -1,0 +1,28 @@
+d{} - Election Data is presented{"ipAddress":"172.27.166.177","port":8080,"nodeId":"localhost:customer-service:879572"} -- Optional[{"ipAddress":"172.27.166.177","port":8080,"nodeId":"localhost:customer-service:879572"}]
+d{} - Election Result is Current Leader{"ipAddress":"172.27.166.177","port":8080,"nodeId":"localhost:customer-service:879572"}
+d{} - Checking if current serviceNode is granted Leader ({"host":"172.27.166.177","port":"8080","nodeId":"localhost:customer-service:745620"}),({"host":"172.27.166.177","port":"8080","nodeId":"localhost:customer-service:879572"})
+d{} - I'm Servent Now
+d{} - Publishing New Leader Configured Event
+Exception in thread "Thread-1654" org.springframework.core.task.TaskRejectedException: Executor [java.util.concurrent.ThreadPoolExecutor@6bc76d22[Terminated, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 41]] did not accept task: org.springframework.context.event.SimpleApplicationEventMulticaster$$Lambda$1072/0x0000000801303840@5c1c3482
+	at org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor.execute(ThreadPoolTaskExecutor.java:317)
+	at org.springframework.cloud.sleuth.instrument.async.LazyTraceThreadPoolTaskExecutor.execute(LazyTraceThreadPoolTaskExecutor.java:66)
+	at jdk.internal.reflect.GeneratedMethodAccessor75.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:567)
+	at org.springframework.cloud.sleuth.instrument.async.ExecutorMethodInterceptor.invoke(ExecutorBeanPostProcessor.java:351)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:691)
+	at org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor$$EnhancerBySpringCGLIB$$fb37d50f.execute(<generated>)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:136)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:403)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:360)
+	at pl.piomin.services.customer.event.NewLeaderConfiguredEventPublisher.publish(NewLeaderConfiguredEventPublisher.java:19)
+	at pl.piomin.services.customer.leader.LeaderUtil$1.run(LeaderUtil.java:46)
+	at java.base/java.lang.Thread.run(Thread.java:830)
+Caused by: java.util.concurrent.RejectedExecutionException: Task org.springframework.context.event.SimpleApplicationEventMulticaster$$Lambda$1072/0x0000000801303840@5c1c3482 rejected from java.util.concurrent.ThreadPoolExecutor@6bc76d22[Terminated, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 41]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$AbortPolicy.rejectedExecution(ThreadPoolExecutor.java:2055)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.reject(ThreadPoolExecutor.java:825)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1355)
+	at org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor.execute(ThreadPoolTaskExecutor.java:314)
+	... 15 more
