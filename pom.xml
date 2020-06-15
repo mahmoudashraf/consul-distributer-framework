@@ -15,7 +15,7 @@
 	<packaging>jar</packaging>
 	<description>Consul Leader Election helps creating distributed application having multiple services registered in cluster and one leader at a time and colaborate to achieve distributed processing.</description>
 	<url>https://github.com/mahmoudashraf/consul-leader-election</url>
-
+	<version>0.1.RELEASE</version>
 
 
 	<licenses>
@@ -71,24 +71,30 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>27.1-jre</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
 	</dependencies>
 
-<distributionManagement>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-    </repository>
-  </distributionManagement>
-  
+	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>Nexus Release Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+	</distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -127,34 +133,34 @@
 					</execution>
 				</executions>
 			</plugin>
-<plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-gpg-plugin</artifactId>
-    <version>1.6</version>
-    <executions>
-      <execution>
-        <id>sign-artifacts</id>
-        <phase>verify</phase>
-        <goals>
-          <goal>sign</goal>
-        </goals>
-        
-        <configuration>
-          <executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>
-        </configuration>
-            
-            
-            
-      </execution>
-    </executions>
-  </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+
+						<configuration>
+							<executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>
+						</configuration>
+
+
+
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 
-<!-- Sign artifacts for uploading to maven central -->
-  
-  
-  
+		<!-- Sign artifacts for uploading to maven central -->
+
+
+
 	</build>
 
 
