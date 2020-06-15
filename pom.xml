@@ -12,7 +12,35 @@
 	<groupId>com.github.mahmoudashraf</groupId>
 	<artifactId>consul-leader-election</artifactId>
 	<name>consul-leader-election</name>
-	
+	<packaging>jar</packaging>
+	<description>Consul Leader Election helps creating distributed application having multiple services registered in cluster and one leader at a time and colaborate to achieve distributed processing.</description>
+	<url>https://github.com/mahmoudashraf/consul-leader-election</url>
+
+
+
+	<licenses>
+		<license>
+			<name>The MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Mahmoud Ashraf</name>
+			<email>engmahmoudalgamal@gmail.com</email>
+			<organization>Sonatype</organization>
+			<organizationUrl>http://www.sonatype.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/mahmoudashraf/consul-leader-election.git</connection>
+		<developerConnection>scm:git:ssh://github.com/mahmoudashraf/consul-leader-election.git</developerConnection>
+		<url>http://github.com/mahmoudashraf/consul-leader-election/tree/master</url>
+	</scm>
+
+
 
 
 	<properties>
@@ -58,6 +86,35 @@
 					<target>13</target>
 				</configuration>
 			</plugin>
+
+
+			<!-- Attach source jars -->
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-source</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 

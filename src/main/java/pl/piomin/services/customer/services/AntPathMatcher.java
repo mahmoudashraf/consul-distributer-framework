@@ -14,39 +14,14 @@
  */
 package pl.piomin.services.customer.services;
 
+
+/*
+ * Check docs
+ */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/**
- * PathMatcher implementation for Ant-style path patterns. Examples are provided below.
- * <p>
- * Part of this mapping code has been kindly borrowed from <a href="http://ant.apache.org">Apache
- * Ant</a> and <a href="http://springframework.org">Spring Framework</a>.
- * <p>
- * The mapping matches URLs using the following rules:<br>
- * <ul>
- * <li>? matches one character</li>
- * <li>* matches zero or more characters</li>
- * <li>** matches zero or more 'directories' in a path</li>
- * </ul>
- * <p>
- * Some examples:<br>
- * <ul>
- * <li><code>com/t?st.jsp</code> - matches <code>com/test.jsp</code> but also
- * <code>com/tast.jsp</code> or <code>com/txst.jsp</code></li>
- * <li><code>com/*.jsp</code> - matches all <code>.jsp</code> files in the <code>com</code>
- * directory</li>
- * <li><code>com/&#42;&#42;/test.jsp</code> - matches all <code>test.jsp</code> files underneath the
- * <code>com</code> path</li>
- * <li><code>org/springframework/&#42;&#42;/*.jsp</code> - matches all <code>.jsp</code> files
- * underneath the <code>org/springframework</code> path</li>
- * <li><code>org/&#42;&#42;/servlet/bla.jsp</code> - matches
- * <code>org/springframework/servlet/bla.jsp</code> but also
- * <code>org/springframework/testing/servlet/bla.jsp</code> and <code>org/servlet/bla.jsp</code>
- * </li>
- * </ul>
- */
 public class AntPathMatcher {
     public static final AntPathMatcher INSTANCE = new AntPathMatcher();
 
@@ -82,17 +57,6 @@ public class AntPathMatcher {
         return doMatch(pattern, path, false, isCaseSensitive);
     }
 
-    /**
-     * Actually match the given <code>path</code> against the given <code>pattern</code>.
-     * 
-     * @param pattern the pattern to match against
-     * @param path the path String to test
-     * @param fullMatch whether a full pattern match is required (else a pattern match as far as the
-     *        given base path goes is sufficient)
-     * @param isCaseSensitive Whether or not matching should be performed case sensitively.
-     * @return <code>true</code> if the supplied <code>path</code> matched, <code>false</code> if it
-     *         didn't
-     */
     protected boolean doMatch(String pattern, String path, boolean fullMatch,
             boolean isCaseSensitive) {
         if (path.startsWith(this.pathSeparator) != pattern.startsWith(this.pathSeparator)) {
@@ -217,18 +181,6 @@ public class AntPathMatcher {
         return true;
     }
 
-    /**
-     * Tests whether or not a string matches against a pattern. The pattern may contain two special
-     * characters:<br>
-     * '*' means zero or more characters<br>
-     * '?' means one and only one character
-     * 
-     * @param pattern pattern to match against. Must not be <code>null</code>.
-     * @param str string which must be matched against the pattern. Must not be <code>null</code>.
-     * @param caseSensitive Whether or not matching should be performed case sensitively.
-     * @return <code>true</code> if the string matches against the pattern, or <code>false</code>
-     *         otherwise.
-     */
     private boolean matchStrings(String pattern, String str, boolean caseSensitive) {
         char[] patArr = pattern.toCharArray();
         char[] strArr = str.toCharArray();
@@ -364,31 +316,6 @@ public class AntPathMatcher {
         return true;
     }
 
-    /**
-     * Given a pattern and a full path, determine the pattern-mapped part.
-     * <p>
-     * For example:
-     * <ul>
-     * <li>'<code>/docs/cvs/commit.html</code>' and ' <code>/docs/cvs/commit.html</code> -> ''</li>
-     * <li>'<code>/docs/*</code>' and '<code>/docs/cvs/commit</code> -> '
-     * <code>cvs/commit</code>'</li>
-     * <li>'<code>/docs/cvs/*.html</code>' and ' <code>/docs/cvs/commit.html</code> ->
-     * '<code>commit.html</code>'</li>
-     * <li>'<code>/docs/**</code>' and '<code>/docs/cvs/commit</code> -> '
-     * <code>cvs/commit</code>'</li>
-     * <li>'<code>/docs/**\/*.html</code>' and ' <code>/docs/cvs/commit.html</code> ->
-     * '<code>cvs/commit.html</code>'</li>
-     * <li>'<code>/*.html</code>' and '<code>/docs/cvs/commit.html</code> -> '
-     * <code>docs/cvs/commit.html</code>'</li>
-     * <li>'<code>*.html</code>' and '<code>/docs/cvs/commit.html</code> -> '
-     * <code>/docs/cvs/commit.html</code>'</li>
-     * <li>'<code>*</code>' and '<code>/docs/cvs/commit.html</code> -> '
-     * <code>/docs/cvs/commit.html</code>'</li>
-     * </ul>
-     * <p>
-     * Assumes that {@link #match} returns <code>true</code> for ' <code>pattern</code>' and
-     * '<code>path</code>', but does <strong>not</strong> enforce this.
-     */
     public String extractPathWithinPattern(String pattern, String path) {
         String[] patternParts = tokenizeToStringArray(pattern, this.pathSeparator);
         String[] pathParts = tokenizeToStringArray(path, this.pathSeparator);
@@ -420,22 +347,6 @@ public class AntPathMatcher {
         return buffer.toString();
     }
 
-    /**
-     * Tokenize the given String into a String array via a StringTokenizer. Trims tokens and omits
-     * empty tokens.
-     * <p>
-     * The given delimiters string is supposed to consist of any number of delimiter characters.
-     * Each of those characters can be used to separate tokens. A delimiter is always a single
-     * character; for multi-character delimiters, consider using
-     * <code>delimitedListToStringArray</code>
-     * 
-     * @param str the String to tokenize
-     * @param delimiters the delimiter characters, assembled as String (each of those characters is
-     *        individually considered as delimiter).
-     * @return an array of the tokens
-     * @see java.util.StringTokenizer
-     * @see java.lang.String#trim()
-     */
     public static String[] tokenizeToStringArray(String str, String delimiters) {
         if (str == null) {
             return null;
@@ -457,17 +368,6 @@ public class AntPathMatcher {
                 : Character.toUpperCase(ch) != Character.toUpperCase(other);
     }
 
-    /**
-     * Determine the root directory for the given location.
-     * <p>
-     * Used for determining the starting point for file matching, resolving the root directory
-     * location
-     * <p>
-     * Will return "/WEB-INF/" for the pattern "/WEB-INF/*.xml", for example.
-     *
-     * @param location the location to check
-     * @return the part of the location that denotes the root directory
-     */
     public String determineRootDir(String location) {
         int prefixEnd = location.indexOf(':') + 1;
         int rootDirEnd = location.length();

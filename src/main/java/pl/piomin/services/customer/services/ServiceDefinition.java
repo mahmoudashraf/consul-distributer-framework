@@ -16,12 +16,6 @@ package pl.piomin.services.customer.services;
 
 import java.util.Map;
 
-/**
- * Represents a Service.
- *
- * @see ServiceChooser
- * @see ServiceDiscovery
- */
 public interface ServiceDefinition {
     String SERVICE_META_PREFIX = "service.";
 
