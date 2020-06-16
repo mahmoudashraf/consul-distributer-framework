@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.context.WebServerInitializedEvent;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import com.google.gson.Gson;
@@ -21,18 +22,19 @@ import pl.piomin.services.customer.exception.LeaderNotPresented;
 import pl.piomin.services.customer.services.ServiceDefinition;
 
 @Component
+@Configuration
 public class LeaderObserver {
 
     @org.springframework.beans.factory.annotation.Value("${spring.cloud.consul.service-leader.time-waiting-before-volunteer-afterstepdown:120}")
-    private static long TIME_TO_WAIT_LEADER_AFTER_STEPDOWN_BEFORE_VOLUNTEERING_IN_SECONDS;
+    private long TIME_TO_WAIT_LEADER_AFTER_STEPDOWN_BEFORE_VOLUNTEERING_IN_SECONDS;
     @org.springframework.beans.factory.annotation.Value("${spring.cloud.consul.service-leader.time-waiting-before-volunteer-afterintialization:60}")
-    private static long TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS;
+    private long TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS;
     @org.springframework.beans.factory.annotation.Value("${spring.cloud.consul.service-leader.timeout-stop-try-volunteering:60}")
-    private static long TIME_TO_WAIT_TRY_VOLUNTEERING_IN_SECONDS;
+    private long TIME_TO_WAIT_TRY_VOLUNTEERING_IN_SECONDS;
     @org.springframework.beans.factory.annotation.Value("${spring.cloud.consul.service-leader.session-ttl:60}")
-    private static int TIME_TTL_LEADER_SESSION_IN_SECONDS;
+    private int TIME_TTL_LEADER_SESSION_IN_SECONDS;
 
-    private static final Logger logger = LoggerFactory.getLogger(LeaderObserver.class);
+    private final Logger logger = LoggerFactory.getLogger(LeaderObserver.class);
 
     @Autowired
     private ConsulConnector connector;

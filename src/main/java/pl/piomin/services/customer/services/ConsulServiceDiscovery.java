@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import com.orbitz.consul.model.catalog.CatalogService;
 import com.orbitz.consul.model.health.ServiceHealth;
@@ -14,6 +15,7 @@ import pl.piomin.services.customer.dto.ServiceNodeInfo;
 import pl.piomin.services.customer.leader.ConsulConnector;
 
 @Component
+@Configuration
 public class ConsulServiceDiscovery {
 
     @Autowired

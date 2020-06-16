@@ -1,0 +1,10 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+pl.piomin.services.customer.dto.ServiceNodeInfo,\
+pl.piomin.services.customer.event.IfGrantedLeaderEventPublisher,\
+pl.piomin.services.customer.event.NewLeaderConfiguredEventPublisher,\
+pl.piomin.services.customer.leader.ConsulConnector,\
+pl.piomin.services.customer.leader.LeaderObserver,\
+pl.piomin.services.customer.leader.LeaderUtil,\
+pl.piomin.services.customer.leader.annotation.AuthAspect,\
+pl.piomin.services.customer.leader.annotation.OnLeaderCheckImpl,\
+pl.piomin.services.customer.services.ConsulServiceDiscovery

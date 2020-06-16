@@ -5,11 +5,13 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import com.google.common.net.HostAndPort;
 import com.orbitz.consul.Consul;
 
 @Component
+@Configuration
 public class ConsulConnector {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsulConnector.class);
