@@ -2,6 +2,7 @@ package com.consul.leader.elections.leader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.event.EventListener;
 import com.consul.leader.elections.event.IfGrantedLeaderEvent;
 import com.consul.leader.elections.event.NewLeaderConfiguredEvent;
 
@@ -20,9 +21,19 @@ public interface Watcher {
         return LeaderObserver.getInstance();
     }
 
-    public void onGrantedLeaderNotification(IfGrantedLeaderEvent event);
+    @EventListener(IfGrantedLeaderEvent.class)
+    public default void receiveOnGrantedLeaderNotification() {
+        onGrantedLeaderNotification();
+    }
 
-    public void newLeaderNotification(NewLeaderConfiguredEvent event);
+    @EventListener(NewLeaderConfiguredEvent.class)
+    public default void receivenewLeaderNotification() {
+        newLeaderNotification();
+    }
+
+    public void onGrantedLeaderNotification();
+
+    public void newLeaderNotification();
 
 
 }
