@@ -1,12 +1,13 @@
 # Consul-Leader-Election
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-# What is Cosnul Server?
+# What is [Cosnul Server] (https://www.hashicorp.com/products/consul/)?
 Consul is a distributed system solution providing a full featured control plane with -
 - Service discovery 
 - Configuration, and segmentation functionality.
 
 Each of these features can be used individually as needed, or they can be used together to build a distributed system.
+vis
 
 # Why Leader Election !!!???
   - Distributed System consists of serveral nodes that co-coperate to acheive distributed processing tasks
