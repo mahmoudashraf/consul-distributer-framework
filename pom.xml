@@ -15,7 +15,7 @@
 	<packaging>jar</packaging>
 	<description>Consul Leader Election helps creating distributed application having multiple services registered in cluster and one leader at a time and colaborate to achieve distributed processing.</description>
 	<url>https://github.com/mahmoudashraf/consul-leader-election</url>
-	<version>2.3.1.RELEASE</version>
+	<version>0.1.RELEASE</version>
 
 
 	<licenses>
@@ -71,12 +71,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>27.1-jre</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
@@ -94,6 +88,18 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 	</distributionManagement>
+
+
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+ 			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>29.0-jre</version>
+    </dependency>
+   </dependencies>
+</dependencyManagement>
+
 
 	<build>
 		<plugins>
@@ -155,12 +161,11 @@
 					</execution>
 				</executions>
 			</plugin>
+		     
 		</plugins>
 
 
 		<!-- Sign artifacts for uploading to maven central -->
-
-
 
 	</build>
 
