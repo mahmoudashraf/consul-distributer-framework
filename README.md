@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 # What is Cosnul Server ?
- [Consul](https://www.hashicorp.com/products/consul "Consul") is a distributed system solution providing a full featured control plane with -
+ [Consul](https://www.hashicorp.com/products/consul "Consul") is a distributed system solution providing a full featured control plane with:
 - Service discovery 
 - Configuration, and segmentation functionality.
 
@@ -10,12 +10,12 @@ Each of these features can be used individually as needed, or they can be used t
 vis
 
 # Why Leader Election !!!???
-  - Distributed System consists of serveral nodes that co-coperate to acheive distributed processing tasks
-  - Leader is needed to devide processing tasks between nodes and gather processing results to expose the final result 
+  - Distributed System consists of serveral nodes that co-operate to achieve distributed processing tasks
+  - Leader devide processing tasks between nodes and gather processing results to expose the final result 
 
 Example:
-  If you have 250K document to search for a specific word and show how many times that word was mentioned inside.
-Leader will devide documnts betwwen nodes pro process and return result to leader
+  If you have 250K documents to search for a specific word and you want to show How many times that word was mentioned inside.
+Leader will devide documents between nodes to process and return result to leader
 
 ![alt text](https://github.com/mahmoudashraf/consul-leader-election/blob/master/ExampleDiagram.jpg)
 
