@@ -20,6 +20,7 @@ import com.orbitz.consul.ConsulException;
 import com.orbitz.consul.KeyValueClient;
 import com.orbitz.consul.cache.KVCache;
 import com.orbitz.consul.model.kv.Value;
+import com.orbitz.consul.model.session.SessionInfo;
 
 @Component
 @Configuration
@@ -143,8 +144,8 @@ public class LeaderObserver {
         long start = System.currentTimeMillis();
         while (this.observedLeader.isEmpty()) {
             try {
-                logger.info(
-                        "Start Volunteering baecuase observeris :" + this.observedLeader.isEmpty());
+                logger.info("Start Volunteering baecuase observer is Empty :"
+                        + this.observedLeader.isEmpty());
                 leutil.releaseLockForService(serviceNode.getServiceName());
                 // Need to check if needed
                 Leader leaderVoulantierInfo = new Leader(serviceNode.getIPAddress(),
@@ -168,7 +169,7 @@ public class LeaderObserver {
 
             if (this.observedLeader.isEmpty() && System.currentTimeMillis()
                     - start > TIME_TO_WAIT_TRY_VOLUNTEERING_IN_SECONDS * 1000) {
-                logger.info("Threshold exceeded Will enable Leadership and Volunteer");
+                logger.info("Threshold exceeded Will disable Leadership and Volunteer");
                 serviceNode.disableLeadership();
                 return;
             }
@@ -179,8 +180,8 @@ public class LeaderObserver {
 
     private void executeElection(Leader leaderVoulantierInfo) {
         logger.info("Execute Election :");
-        Optional<String> electNewLeaderForService = leutil.electNewLeaderForService(
-                serviceNode.getServiceName(), g.toJson(leaderVoulantierInfo));
+        Optional<String> electNewLeaderForService =
+                leutil.electNewLeaderForService(serviceNode.getServiceName(), leaderVoulantierInfo);
 
         if (electNewLeaderForService.isPresent()) {
             logger.trace("Election Data is presented" + electNewLeaderForService.get() + " -- "
@@ -199,6 +200,10 @@ public class LeaderObserver {
                 leaderUtil.sendNewLeaderConfiguredNotification();
             }
 
+        } else {
+            logger.trace(
+                    "Election Data is not presented will wait for 3s and try to volunteer again");
+            waitForMillisecond(3000);
         }
 
     }
@@ -285,6 +290,8 @@ public class LeaderObserver {
                     leaderUtil.sendNewLeaderConfiguredNotification();
                 } else {
                     logger.info("This is not a new leader");
+                    volunteerIfLeaderSessionInValid(leaderInfo);
+                    return;
                 }
             }
 
@@ -298,6 +305,18 @@ public class LeaderObserver {
             return;
         }
 
+    }
+
+    protected void volunteerIfLeaderSessionInValid(String leaderInfo) {
+        logger.trace("Checking if Leader sionId is Valid");
+        Optional<SessionInfo> sessionInfo = connector.getConsulClient().sessionClient()
+                .getSessionInfo(g.fromJson(leaderInfo, Leader.class).getSessionId());
+        if (!sessionInfo.isPresent()) {
+            logger.info("Leader SessionId is not valid will volunteer");
+            this.observedLeader.reset();
+            startObservation(
+                    TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS * 1000);
+        }
     }
 
     public Leader getCurrentLeader() throws LeaderNotPresented {

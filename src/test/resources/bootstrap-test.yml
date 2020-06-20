@@ -8,7 +8,7 @@ spring:
         
 logging:
   level:
-    pl.piomin.services.customer.*: TRACE
+    com.consul.leader.elections.*: TRACE
   pattern:
     console: d{} - %msg%n
     
