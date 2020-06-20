@@ -25,6 +25,9 @@ public class SessionHolder implements Runnable {
                 .ttl(String.format(TTL_TEMPLATE, ttl)).build();
         id = client.sessionClient().createSession(session).getId();
         logger.info("Session Created ID:" + id);
+    }
+
+    protected void startSessionKeeper() {
         Thread upkeep = new Thread(this);
         upkeep.setDaemon(true);
         upkeep.start();
@@ -45,7 +48,7 @@ public class SessionHolder implements Runnable {
             wait(ttl / 2 * 1000);
         } catch (InterruptedException e) {
         }
-        while (!isShutdown()) {
+        while (!isShutdown() && LeaderObserver.getInstance().isGrantedLeader()) {
             if (liveChecks.isEmpty() || liveChecks.stream().allMatch(Supplier::get)) {
                 client.sessionClient().renewSession(getId());
                 logger.info("Leader Session Renewed:" + id);
@@ -56,6 +59,7 @@ public class SessionHolder implements Runnable {
                 logger.debug("Session renewed : InterruptedException happened");
             }
         }
+        this.close();
         logger.info("Leader Session is shutdown:");
     }
 

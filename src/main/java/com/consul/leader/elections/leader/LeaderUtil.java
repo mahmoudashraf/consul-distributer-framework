@@ -95,9 +95,11 @@ public class LeaderUtil {
     protected boolean isGrantedLeader(ServiceNodeInfo serviceNode, Leader leader) {
         logger.trace("Checking if current serviceNode is granted Leader (" + serviceNode.toString()
                 + "),(" + leader.toString() + ")");
-        return g.toJson(new Leader(serviceNode.getIPAddress(), serviceNode.getPort(),
-                serviceNode.getNodeId())).toString().equals(g.toJson(leader).toString()) ? true
-                        : false;
+        return (serviceNode.getNodeId().equals(leader.getNodeId())) ? true : false;
+        /*
+         * return g.toJson(new Leader(serviceNode.getIPAddress(), serviceNode.getPort(),
+         * serviceNode.getNodeId())).toString().equals(g.toJson(leader).toString()) ? true : false;
+         */
     }
 
 

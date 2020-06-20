@@ -10,4 +10,4 @@ spring:
 
 logging:
   level:
-    pl.piomin.services.customer.*: TRACE
+    com.consul.leader.elections.*: TRACE

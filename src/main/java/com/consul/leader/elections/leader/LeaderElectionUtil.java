@@ -1,6 +1,8 @@
 package com.consul.leader.elections.leader;
 
 import java.util.Optional;
+import com.consul.leader.elections.dto.Leader;
+import com.google.gson.Gson;
 import com.orbitz.consul.Consul;
 import com.orbitz.consul.KeyValueClient;
 import com.orbitz.consul.model.kv.Value;
@@ -11,7 +13,7 @@ public class LeaderElectionUtil {
 
     private final Consul client;
     private final int ttl;
-
+    private Gson g = new Gson();
 
     public LeaderElectionUtil(Consul client, int ttl) {
         this.client = client;
@@ -29,10 +31,16 @@ public class LeaderElectionUtil {
         });
     }
 
-    public Optional<String> electNewLeaderForService(final String serviceName, final String info) {
+    public Optional<String> electNewLeaderForService(final String serviceName,
+            final Leader volounteerLeaderInfo) {
         final String key = getServiceKey(serviceName);
-        String sessionId = new SessionHolder(client, serviceName, ttl).getId();
+        SessionHolder sessionHolder = new SessionHolder(client, serviceName, ttl);
+        String sessionId = sessionHolder.getId();
+        volounteerLeaderInfo.setSessionId(sessionId);
+        String info = g.toJson(volounteerLeaderInfo);
         if (client.keyValueClient().acquireLock(key, info, sessionId)) {
+            sessionHolder.startSessionKeeper();
+
             return Optional.of(info);
         } else {
             return getLeaderInfoForService(serviceName);

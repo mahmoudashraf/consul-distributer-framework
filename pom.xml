@@ -90,15 +90,15 @@
 	</distributionManagement>
 
 
-<dependencyManagement>
-  <dependencies>
-    <dependency>
- 			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>29.0-jre</version>
-    </dependency>
-   </dependencies>
-</dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>29.0-jre</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 
 	<build>
@@ -130,6 +130,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -161,7 +164,7 @@
 					</execution>
 				</executions>
 			</plugin>
-		     
+
 		</plugins>
 
 

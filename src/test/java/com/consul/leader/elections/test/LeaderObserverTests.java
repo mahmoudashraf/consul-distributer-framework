@@ -40,6 +40,7 @@ public class LeaderObserverTests {
     public void startUpWithValidLeaderValues() throws LeaderNotPresented {
         testUtil.deleteLeaderFromConsul();
         Leader leader = new Leader("live1", 8081, "id1");
+        leader.setSessionId("sessiondummyid");
         testUtil.setLeaderInConsul(leader);
         testUtil.publishWebServerInitializedEventCustom();
         // wait until listner get consul values
@@ -63,6 +64,7 @@ public class LeaderObserverTests {
     public void startUpWithInValidLeaderValues() throws LeaderNotPresented {
         testUtil.deleteLeaderFromConsul();
         Leader leader = new Leader("", 0, "id1");
+        leader.setSessionId("sessiondummyid");
         testUtil.setLeaderInConsul(leader);
         testUtil.publishWebServerInitializedEventCustom();
         // wait until listner get consul values
