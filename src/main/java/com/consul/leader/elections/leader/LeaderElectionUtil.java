@@ -39,8 +39,6 @@ public class LeaderElectionUtil {
         volounteerLeaderInfo.setSessionId(sessionId);
         String info = g.toJson(volounteerLeaderInfo);
         if (client.keyValueClient().acquireLock(key, info, sessionId)) {
-            sessionHolder.startSessionKeeper();
-
             return Optional.of(info);
         } else {
             return getLeaderInfoForService(serviceName);

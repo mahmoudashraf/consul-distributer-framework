@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.consul.leader.elections.exception.LeaderNotPresented;
 import com.orbitz.consul.Consul;
 import com.orbitz.consul.model.session.ImmutableSession;
 import com.orbitz.consul.model.session.Session;
@@ -18,6 +19,8 @@ public class SessionHolder implements Runnable {
     private boolean shutdown = false;
     private static final Logger logger = LoggerFactory.getLogger(LeaderObserver.class);
 
+    private static SessionHolder sessionHolderInstance;
+
     public SessionHolder(Consul client, String service, long ttl) {
         this.client = client;
         this.ttl = ttl;
@@ -25,12 +28,19 @@ public class SessionHolder implements Runnable {
                 .ttl(String.format(TTL_TEMPLATE, ttl)).build();
         id = client.sessionClient().createSession(session).getId();
         logger.info("Session Created ID:" + id);
+        SessionHolder.sessionHolderInstance = this;
     }
 
     protected void startSessionKeeper() {
-        Thread upkeep = new Thread(this);
-        upkeep.setDaemon(true);
-        upkeep.start();
+        logger.info("Session Keeper is called");
+        if (LeaderObserver.getInstance().isGrantedLeader()) {
+            logger.info("Current serviceNode is granted");
+            Thread upkeep = new Thread(this);
+            upkeep.setDaemon(true);
+            upkeep.start();
+        } else {
+            logger.info("Current serviceNode is not granted");
+        }
     }
 
     public String getId() {
@@ -48,16 +58,25 @@ public class SessionHolder implements Runnable {
             wait(ttl / 2 * 1000);
         } catch (InterruptedException e) {
         }
-        while (!isShutdown() && LeaderObserver.getInstance().isGrantedLeader()) {
-            if (liveChecks.isEmpty() || liveChecks.stream().allMatch(Supplier::get)) {
-                client.sessionClient().renewSession(getId());
-                logger.info("Leader Session Renewed:" + id);
+        logger.info("Start Session Keeper");
+        try {
+            while (!isShutdown() && LeaderObserver.getInstance().getCurrentLeader().getSessionId()
+                    .equals(this.getId())) {
+                logger.info("Start Session will be updated ");
+                if (liveChecks.isEmpty() || liveChecks.stream().allMatch(Supplier::get)) {
+                    client.sessionClient().renewSession(getId());
+                    logger.info("Leader Session Renewed:" + id);
+                }
+                try {
+                    wait(ttl / 2 * 1000);
+                } catch (InterruptedException e) {
+                    logger.debug("Session renewed : InterruptedException happened");
+                }
+                logger.info("Waitted and soon will update session again");
             }
-            try {
-                wait(ttl / 2 * 1000);
-            } catch (InterruptedException e) {
-                logger.debug("Session renewed : InterruptedException happened");
-            }
+        } catch (LeaderNotPresented e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         this.close();
         logger.info("Leader Session is shutdown:");
@@ -72,5 +91,9 @@ public class SessionHolder implements Runnable {
         notify();
         client.sessionClient().destroySession(getId());
         logger.info("Session is closed");
+    }
+
+    public static SessionHolder getSessionHolderInstance() {
+        return sessionHolderInstance;
     }
 }

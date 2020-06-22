@@ -88,8 +88,8 @@ public class LeaderUtil {
     protected boolean isNewLeader(String leaderInfo, Leader leader) {
         logger.trace("Checking if leader is new (" + leaderInfo.toString() + "),("
                 + leader.toString() + ")");
-        return (isValidLeader(leaderInfo) && !leaderInfo.equals(g.toJson(leader).toString())) ? true
-                : false;
+        return (isValidLeader(leaderInfo) && !g.fromJson(leaderInfo, Leader.class).getSessionId()
+                .equals(leader.getSessionId())) ? true : false;
     }
 
     protected boolean isGrantedLeader(ServiceNodeInfo serviceNode, Leader leader) {
