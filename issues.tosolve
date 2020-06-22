@@ -1,3 +1,92 @@
+multiple detelet 
+check if new configured is sent
+
+eId":"localhost:customer-service:46688"})
+d{} - Session is closed
+d{} - Leader Session is shutdown:
+d{} - Session is closed
+d{} - Leader Session is shutdown:
+
+
+
+
+
+
+
+
+sion Created ID:e85d0953-3bcf-3716-2860-f4fc41e929f2
+d{} - Checking if current serviceNode is granted Leader ({"host":"172.27.166.177","port":"12360","nodeId":"localhost:customer-service:191701"}),({"host":"","port":"-1","nodeId":""})
+d{} - Election Data is presented{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"e85d0953-3bcf-3716-2860-f4fc41e929f2"} -- Optional[{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"e85d0953-3bcf-3716-2860-f4fc41e929f2"}]
+d{} - Election Result is Current Leader{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"e85d0953-3bcf-3716-2860-f4fc41e929f2"}
+d{} - Checking if current serviceNode is granted Leader ({"host":"172.27.166.177","port":"12360","nodeId":"localhost:customer-service:191701"}),({"host":"172.27.166.177","port":"12360","nodeId":"localhost:customer-service:191701"})
+d{} - I'm the leader Now
+d{} - Publishing Granite Leader Event
+d{} - onGrantedLeaderNotification recieved
+d{} - Servent List
+d{} - Session is closed
+d{} - Leader Session is shutdown:
+d{} - New leader Values Recieved From Consul
+d{} - Values Present for new leader :{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"e85d0953-3bcf-3716-2860-f4fc41e929f2"}
+d{} - Checking if leader valid{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"e85d0953-3bcf-3716-2860-f4fc41e929f2"}
+d{} - Checking if leader is new ({"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"e85d0953-3bcf-3716-2860-f4fc41e929f2"}),({"host":"172.27.166.177","port":"12360","nodeId":"localhost:customer-service:191701"})
+d{} - Checking if leader valid{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"e85d0953-3bcf-3716-2860-f4fc41e929f2"}
+d{} - This is not a new leader
+d{} - Checking if Leader sionId is Valid
+d{} - New leader Values Recieved From Consul
+d{} - New Decoded Values is not present
+d{} - Publishing New Leader Configured Event
+d{} - Start Observation
+d{} - Start Volunteering baecuase observer is Empty :true
+d{} - newLeaderNotification recieved
+d{} - Requesting Current Leader
+d{} - Current observed leader is empty Requesting New Leader
+d{} - Leader is not presented , Wait for New Leader Configured Notification
+d{} - [DefaultServiceCallService[customer-service@localhost:8080], DefaultServiceCallService[customer-service@localhost:8648], DefaultServiceCallService[customer-service@localhost:12388], DefaultServiceCallService[customer-service@localhost:5717], DefaultServiceCallService[customer-service@localhost:8551], DefaultServiceCallService[customer-service@localhost:5488], DefaultServiceCallService[customer-service@localhost:12558], DefaultServiceCallService[customer-service@localhost:8080], DefaultServiceCallService[customer-service@localhost:12378], DefaultServiceCallService[customer-service@localhost:12400], DefaultServiceCallService[customer-service@localhost:8080], DefaultServiceCallService[customer-service@localhost:4345]]
+d{} - DefaultServiceCallService[customer-service@localhost:8080]
+d{} - DefaultServiceCallService[customer-service@localhost:8648]
+d{} - DefaultServiceCallService[customer-service@localhost:12388]
+d{} - DefaultServiceCallService[customer-service@localhost:5717]
+d{} - DefaultServiceCallService[customer-service@localhost:8551]
+d{} - DefaultServiceCallService[customer-service@localhost:5488]
+d{} - DefaultServiceCallService[customer-service@localhost:12558]
+d{} - DefaultServiceCallService[customer-service@localhost:8080]
+d{} - DefaultServiceCallService[customer-service@localhost:12378]
+d{} - DefaultServiceCallService[customer-service@localhost:12400]
+d{} - DefaultServiceCallService[customer-service@localhost:8080]
+d{} - DefaultServiceCallService[customer-service@localhost:4345]
+d{} - I'm Leader recieved Leader job
+d{} - Waiting 10000
+d{} - Checking leaderVoulantierInfo
+d{} - Checking if leader valid{"host":"null","port":"0","nodeId":"null"}
+d{} - ServiceNode is Valid{"host":"172.27.166.177","port":"12360","nodeId":"localhost:customer-service:191701"}
+d{} - Execute Election :
+d{} - Session Created ID:4e067e90-d962-bd33-490a-1043df55f1cb
+d{} - Election Data is presented{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"4e067e90-d962-bd33-490a-1043df55f1cb"} -- Optional[{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"4e067e90-d962-bd33-490a-1043df55f1cb"}]
+d{} - Election Result is Current Leader{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"4e067e90-d962-bd33-490a-1043df55f1cb"}
+d{} - Checking if current serviceNode is granted Leader ({"host":"172.27.166.177","port":"12360","nodeId":"localhost:customer-service:191701"}),({"host":"172.27.166.177","port":"12360","nodeId":"localhost:customer-service:191701"})
+d{} - I'm the leader Now
+d{} - Publishing Granite Leader Event
+d{} - onGrantedLeaderNotification recieved
+d{} - Servent List
+d{} - New leader Values Recieved From Consul
+d{} - Values Present for new leader :{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"4e067e90-d962-bd33-490a-1043df55f1cb"}
+d{} - Checking if leader valid{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"4e067e90-d962-bd33-490a-1043df55f1cb"}
+d{} - Checking if leader is new ({"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"4e067e90-d962-bd33-490a-1043df55f1cb"}),({"host":"172.27.166.177","port":"12360","nodeId":"localhost:customer-service:191701"})
+d{} - Checking if leader valid{"ipAddress":"172.27.166.177","port":12360,"nodeId":"localhost:customer-service:191701","sessionId":"4e067e90-d962-bd33-490a-1043df55f1cb"}
+d{} - This is not a new leader
+d{} - Checking if Leader sionId is Valid
+d{} - [DefaultServiceCallService[customer-service@localhost:8080], DefaultServiceCallService[customer-service@localhost:8648], DefaultServiceCallService[customer-service@localhost:12388], DefaultServiceCallService[customer-service@localhost:5717], DefaultServiceCallService[customer-service@localhost:8551], DefaultServiceCallService[customer-service@localhost:5488], DefaultServiceCallService[customer-service@localhost:12558], DefaultServiceCallService[customer-service@localhost:8080], DefaultServiceCallService[customer-service@localhost:12378], DefaultServiceCallService[customer-service@localhost:12400], DefaultServiceCallService[customer-service@localhost:8080], DefaultServiceCallService[customer-service@localhost:4345]]
+d{} - DefaultServiceCallService[customer-service@localhost:8080]
+d{} - DefaultServiceCallService[customer-service@localhost:8648]
+d{} - DefaultServiceCallService[customer-service@localhost:12388]
+d{} - DefaultServiceCallService[customer-service@localhost:5717]
+d{} - DefaultServiceCallService[customer-service@localhost:8551]
+d{} - DefaultServiceCallService[customer-service@localhost:5488
+
+
+
+
+
 d{} - Election Data is presented{"ipAddress":"172.27.166.177","port":8080,"nodeId":"localhost:customer-service:879572"} -- Optional[{"ipAddress":"172.27.166.177","port":8080,"nodeId":"localhost:customer-service:879572"}]
 d{} - Election Result is Current Leader{"ipAddress":"172.27.166.177","port":8080,"nodeId":"localhost:customer-service:879572"}
 d{} - Checking if current serviceNode is granted Leader ({"host":"172.27.166.177","port":"8080","nodeId":"localhost:customer-service:745620"}),({"host":"172.27.166.177","port":"8080","nodeId":"localhost:customer-service:879572"})
