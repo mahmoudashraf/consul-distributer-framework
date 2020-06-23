@@ -53,6 +53,7 @@ public class LeaderObserver {
     private Gson g = new Gson();
     private LeaderElectionUtil leutil;
     private KVCache cache;
+    private boolean wasGrantedLeader = false;
 
     @PostConstruct
     private void postConstruct() {
@@ -130,7 +131,6 @@ public class LeaderObserver {
                 if (leaderUtil.isValidLeader(leaderInfo) && isLeaderSessionValid(
                         g.fromJson(leaderInfo, Leader.class).getSessionId())) {
                     this.observedLeader = g.fromJson(leaderOptional.get(), Leader.class);
-                    leaderUtil.sendNewLeaderConfiguredNotification();
                     logger.trace(
                             "Leader is valid , Currently Observed Leader updated successfully");
                     boolean isNewLeader = leaderUtil.isNewLeader(leaderInfo, this.observedLeader);
@@ -139,8 +139,6 @@ public class LeaderObserver {
                         leaderUtil.sendNewLeaderConfiguredNotification();
                     } else {
                         logger.info("I'm still leader");
-
-
                     }
                 }
             } else {
@@ -211,11 +209,18 @@ public class LeaderObserver {
             if (isvValidLeader && isLeaderSessionValid) {
                 this.observedLeader = g.fromJson(leaderInfo, Leader.class);
                 if (leaderUtil.isGrantedLeader(serviceNode, this.observedLeader)) {
-                    logger.info("I'm the leader Now");
+                    if (!wasGrantedLeader) {
+                        logger.info("I'm the leader Now");
+                        logger.info("Wait until Current Leader stop working");
+                        waitForMillisecond(5000);
+                        leaderUtil.sendNotifyLeader();
+                    } else {
+                        logger.info("I'm the leader Again");
+                    }
                     if (this.observedLeader.getSessionId()
                             .equals(SessionHolder.getSessionHolderInstance().getId()))
                         SessionHolder.getSessionHolderInstance().startSessionKeeper();
-                    leaderUtil.sendNotifyLeader();
+
                 } else {
                     logger.info("I'm Servent Now");
                     leaderUtil.sendNewLeaderConfiguredNotification();
@@ -284,6 +289,7 @@ public class LeaderObserver {
                 .findAny();
 
         newValue.ifPresent(value -> {
+            wasGrantedLeader = isGrantedLeader();
             Optional<String> decodedValue = newValue.get().getValueAsString();
             boolean decodedValueIsPresent = decodedValue.isPresent();
             if (!decodedValueIsPresent) {
@@ -295,7 +301,6 @@ public class LeaderObserver {
                     this.observedLeader.reset();
                     leutil.releaseLockForService(serviceNode.getServiceName());
                     logger.info("Released");
-                    leaderUtil.sendNewLeaderConfiguredNotification();
                     startObservation(
                             TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS
                                     * 1000);
@@ -309,8 +314,12 @@ public class LeaderObserver {
                                 g.fromJson(leaderInfo, Leader.class).getSessionId());
                 if (!isValidLeader) {
                     logger.info("New Leader is not Valid");
+                    logger.info("Checking if I'm already Leader So i can release Session");
+                    if (isGrantedLeader()) {
+                        leutil.releaseLockForService(serviceNode.getServiceName());
+                        logger.info("Session Released");
+                    }
                     this.observedLeader.reset();
-                    leaderUtil.sendNewLeaderConfiguredNotification();
                     startObservation(
                             TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS
                                     * 1000);
@@ -322,6 +331,10 @@ public class LeaderObserver {
 
                 if (!isLeaderSessionValid(g.fromJson(leaderInfo, Leader.class).getSessionId())) {
                     logger.info("Leader SessionId is not valid will volunteer");
+                    if (isGrantedLeader()) {
+                        leutil.releaseLockForService(serviceNode.getServiceName());
+                        logger.info("Session Released");
+                    }
                     this.observedLeader.reset();
                     startObservation(
                             TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS
@@ -335,22 +348,19 @@ public class LeaderObserver {
                         leaderUtil.sendNewLeaderConfiguredNotification();
                     } else {
                         logger.info("This is not a new leader");
-
-
                     }
                 }
             }
 
         });
         if (!newValue.isPresent()) {
+            wasGrantedLeader = isGrantedLeader();
             logger.info("New Values Not Present In listner");
+            Leader leaderBeforeUpdateFormConsul = this.observedLeader;
             updateLeaderFromConsul();
-            if (isGrantedLeader()) {
-                leaderUtil.sendNotifyLeader();
-
-            } else {
+            if (leaderUtil.isNewLeader(g.toJson(leaderBeforeUpdateFormConsul),
+                    this.observedLeader)) {
                 leaderUtil.sendNewLeaderConfiguredNotification();
-
             }
             startObservation(
                     TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS * 1000);

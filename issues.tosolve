@@ -1,3 +1,40 @@
+should stop acting as leader when consul values is empty
+if session is not valid you can send new event "stopLeader"
+
+
+
+
+
+
+if granted and new values recieved not valid leader or session  -> realeae
+
+
+
+
+check ifgranted compare sessionid which is 
+- Checking if current serviceNode is granted Leader ({"host":"172.27.166.177","port":"8910","nodeId":"localhost:customer-service:515698"}),({"host":"172.27.166.177","port":"8910","nodeId":"localhost:customer-service:515698"})
+d{} - I'm Servent Now
+d{} - Publishing New Leader Configured Event
+d{} 
+
+
+sessionholder is not working after delet and regrante because it's sessionid is not same
+if regrante and beforegranted true auch new sesionhoder
+
+
+or 
+
+
+
+
+
+
+
+
+
+
+
+
 multiple detelet 
 check if new configured is sent
 
