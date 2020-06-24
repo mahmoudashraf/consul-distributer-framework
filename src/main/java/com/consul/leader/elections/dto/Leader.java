@@ -64,6 +64,7 @@ public class Leader {
         this.ipAddress = "";
         this.port = -1;
         this.nodeId = "";
+        this.sessionId = "";
     }
 
     @JsonIgnore
