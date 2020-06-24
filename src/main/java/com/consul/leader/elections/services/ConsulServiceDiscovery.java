@@ -34,6 +34,7 @@ public class ConsulServiceDiscovery {
     public List<ServiceDefinition> getServices() {
         List<CatalogService> services = connector.getConsulClient().catalogClient()
                 .getService(serviceNode.getServiceName(), QueryOptions.BLANK).getResponse();
+
         List<ServiceHealth> healths = connector.getConsulClient().healthClient()
                 .getAllServiceInstances(serviceNode.getServiceName(), QueryOptions.BLANK)
                 .getResponse();
@@ -75,6 +76,11 @@ public class ConsulServiceDiscovery {
                 e -> (e != null && e.getValue() != null && !StringUtils.isBlank(e.getValue())))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
                 .forEach(meta::put);
+
+        serviceHealthList.stream()
+                .filter(h -> (h.getService().getId().equals(service.getServiceId())))
+                .forEach(hs -> hs.getChecks().stream()
+                        .forEach(check -> meta.put(check.getCheckId(), check.getStatus())));
 
         return new DefaultServiceDefinition(serviceName, service.getServiceAddress(),
                 service.getServicePort(), meta,
