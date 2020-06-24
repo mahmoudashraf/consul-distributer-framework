@@ -57,9 +57,8 @@ public class Helper {
 
 
     public static boolean isLocalService(CatalogService catalogService, ServiceNodeInfo service) {
-        if (/*
-             * catalogService.getAddress().equals(service.getIPAddress()) &&
-             */catalogService.getServicePort() == service.getPort())
+        if (catalogService.getAddress().equals(service.getIPAddress())
+                && catalogService.getServicePort() == service.getPort())
             return true;
 
         return false;

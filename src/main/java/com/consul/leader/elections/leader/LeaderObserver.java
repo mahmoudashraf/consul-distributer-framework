@@ -405,7 +405,6 @@ public class LeaderObserver {
 
     public List<ServiceDefinition> getServentList() throws ConsulException {
         List<ServiceDefinition> serviceDefList = leaderUtil.getServents();
-        logger.debug(serviceDefList.toString());
         return serviceDefList;
     }
 }
