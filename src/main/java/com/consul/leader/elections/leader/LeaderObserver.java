@@ -316,6 +316,10 @@ public class LeaderObserver {
                     logger.info("New Leader is not Valid");
                     logger.info("Checking if I'm already Leader So i can release Session");
                     if (isGrantedLeader()) {
+                        /**
+                         * You can send here new leader notification and also when session is
+                         * invalid
+                         */
                         leutil.releaseLockForService(serviceNode.getServiceName());
                         logger.info("Session Released");
                     }
@@ -331,10 +335,6 @@ public class LeaderObserver {
 
                 if (!isLeaderSessionValid(g.fromJson(leaderInfo, Leader.class).getSessionId())) {
                     logger.info("Leader SessionId is not valid will volunteer");
-                    if (isGrantedLeader()) {
-                        leutil.releaseLockForService(serviceNode.getServiceName());
-                        logger.info("Session Released");
-                    }
                     this.observedLeader.reset();
                     startObservation(
                             TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS
