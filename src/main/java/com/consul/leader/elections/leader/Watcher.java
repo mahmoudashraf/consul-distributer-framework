@@ -21,13 +21,19 @@ public interface Watcher {
         return LeaderObserver.getInstance();
     }
 
+    public static boolean isLeader() {
+        return LeaderObserver.getInstance().getServiceNode().isLeader();
+    }
+
     @EventListener(IfGrantedLeaderEvent.class)
     public default void receiveOnGrantedLeaderNotification() {
+        LeaderObserver.getInstance().getServiceNode().setIsCurrentlyLeaderValue(true);
         onGrantedLeaderNotification();
     }
 
     @EventListener(NewLeaderConfiguredEvent.class)
     public default void receivenewLeaderNotification() {
+        LeaderObserver.getInstance().getServiceNode().setIsCurrentlyLeaderValue(false);
         newLeaderNotification();
     }
 

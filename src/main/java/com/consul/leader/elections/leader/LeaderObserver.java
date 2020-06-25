@@ -3,6 +3,7 @@ package com.consul.leader.elections.leader;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +67,7 @@ public class LeaderObserver {
     }
 
     @EventListener(WebServerInitializedEvent.class)
-    private void bindToAddListner(WebServerInitializedEvent event) {
+    protected void bindToAddListner(WebServerInitializedEvent event) {
         logger.trace("WebServerInitializedEvent recieved to Add Listner");
         addListner();
         logger.trace("Listner added successfully");
@@ -252,10 +253,9 @@ public class LeaderObserver {
         if (leaderUtil.isGrantedLeader(serviceNode, this.observedLeader)) {
             try {
                 logger.info("I'm Leader and will stepdown");
-                leutil.releaseLockForService(serviceNode.getServiceName());
                 this.observedLeader.reset();
                 serviceNode.disableLeadership();
-                leaderUtil.sendNewLeaderConfiguredNotification();
+                leutil.releaseLockForService(serviceNode.getServiceName());
             } catch (ConsulException e) {
                 logger.debug("Exception happened During Step Down" + e.getMessage());
                 waitForMillisecond(3000);
@@ -399,13 +399,24 @@ public class LeaderObserver {
         return this.observedLeader;
     }
 
-    public boolean isGrantedLeader() {
+    protected boolean isGrantedLeader() {
         return leaderUtil.isGrantedLeader(serviceNode, this.observedLeader);
     }
 
-    public List<ServiceDefinition> getServentList() throws ConsulException {
+    public List<ServiceDefinition> getAllServentList() throws ConsulException {
         List<ServiceDefinition> serviceDefList = leaderUtil.getServents();
         return serviceDefList;
     }
+
+    public List<ServiceDefinition> getServentListByTag() throws ConsulException {
+
+        return leaderUtil.getServents().stream()
+                .filter(value2 -> (value2.getMetadata().get("worker") != null
+                        && value2.getMetadata().get("worker").equals("worker1")))
+                .collect(Collectors.toList());
+    }
+
+
+
 }
 

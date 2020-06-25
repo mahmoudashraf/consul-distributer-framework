@@ -51,7 +51,6 @@ public class AllCases {
         testUtil.publishWebServerInitializedEventCustom();
         // wait until listner get consul values
         testUtil.waitForMillisecond(10000);
-        assertEquals(testUtil.getLeaderObserver().isGrantedLeader(), true);
         testUtil.waitForMillisecond(40000);
         assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), true);
@@ -71,7 +70,6 @@ public class AllCases {
 
         // wait until listner get consul values
         testUtil.waitForMillisecond(10000);
-        assertEquals(testUtil.getLeaderObserver().isGrantedLeader(), false);
         testUtil.waitForMillisecond(40000);
         assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), false);
@@ -93,7 +91,6 @@ public class AllCases {
         testUtil.publishWebServerInitializedEventCustom();
         // wait until listner get consul values
         testUtil.waitForMillisecond(40000);
-        assertEquals(testUtil.getLeaderObserver().isGrantedLeader(), true);
         assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), true);
         assertEquals(testUtil.leaderToJson(testUtil.getLeaderObserver().getCurrentLeader()),

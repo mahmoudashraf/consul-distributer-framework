@@ -1,0 +1,54 @@
+@GetMapping("/kill")
+    public String killllservvices() {
+        getwatcher().getAllServentList().stream()
+                .forEach(val -> kill(val.getMetadata().get("service.id")));
+        return "killed";
+    }
+
+    protected void kill(String serviceId) {
+        String command =
+                "curl -v -X PUT http://localhost:8500/v1/agent/service/deregister/" + serviceId;
+        System.out.println(command);
+        ProcessBuilder processBuilder = new ProcessBuilder(command.split(" "));
+        Process process;
+        try {
+            process = processBuilder.start();
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            process.exitValue();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    
+    
+    
+    @GetMapping("/stepdown")
+    @OnLeader
+    public String stepDown() throws LeaderNotPresented {
+        logger.info("Stepdown requested via Webservice");
+        getwatcher().stepDownAndWaitnewLeader();
+        logger.info("Leadership disabled , So i can volunteer only when timeout is reached");
+        logger.info("Current Leader :" + getwatcher().getCurrentLeader().toString());
+        return "leadership disablesd";
+    }
+
+    @GetMapping("/stepup")
+
+    @OnServent
+    public Leader stepUp() throws LeaderNotPresented {
+        logger.info("StepUp requested via Webservice");
+        getwatcher().getServiceNode().enableLeadership();
+        logger.info("Leadership enabled , So i can volunteer now");
+        logger.info("Current Leader :" + getwatcher().getCurrentLeader().toString());
+        return getwatcher().getCurrentLeader();
+    }
+
+    

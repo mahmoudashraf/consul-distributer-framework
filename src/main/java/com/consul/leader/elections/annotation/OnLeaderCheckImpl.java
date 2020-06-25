@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import com.consul.leader.elections.leader.LeaderObserver;
+import com.consul.leader.elections.leader.Watcher;
 
 @Component
 @Configuration
@@ -17,7 +18,7 @@ public class OnLeaderCheckImpl {
     private LeaderObserver observer;
 
     public boolean onLeaderModeCheck() {
-        if (observer.isGrantedLeader()) {
+        if (Watcher.isLeader()) {
             logger.info("I'm leader Leader");
             return true;
         }
