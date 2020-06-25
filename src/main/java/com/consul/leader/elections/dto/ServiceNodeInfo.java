@@ -32,6 +32,8 @@ public class ServiceNodeInfo {
     private String serviceName;
     private boolean capableLeader = true;
 
+    private boolean isCurrentlyLeader = false;
+
     public ServiceNodeInfo() {
 
         try {
@@ -39,6 +41,14 @@ public class ServiceNodeInfo {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isLeader() {
+        return this.isCurrentlyLeader;
+    }
+
+    public void setIsCurrentlyLeaderValue(boolean status) {
+        this.isCurrentlyLeader = status;
     }
 
     public String getIPAddress() {

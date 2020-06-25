@@ -22,7 +22,7 @@ public class WatcherTest implements Watcher {
 
     @OnLeader
     public List<ServiceDefinition> getServents() {
-        return getwatcher().getServentList();
+        return getwatcher().getAllServentList();
     }
 
     @OnServent

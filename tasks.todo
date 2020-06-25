@@ -1,1 +1,26 @@
 TODO: export as jar Build test aplication who to handle closing resources and removing listners @Bean(name="graphDatabaseService", destroyMethod = "shutdown")->removelistner
+
+
+
+design distributed application
+file on s3 contains text in format 5,2,8,8,9,5,55,44,774,44,55665,88
+task is to distribute this file on cluster of services each with range of lines 
+servants returns numbers sorted same format 
+leader collect and create new file on s3 
+
+OnLeader Mode:
+get file and call services all with a range of lines with fien and callback 
+
+
+Onservant Mode:
+receive range of lines path of files and start sorting it lines and return it 
+
+
+
+create github for example  and readme file  
+create aricile
+move to nixsus 
+Pr for spring consul 
+create video  
+code refacgor 
+ 
