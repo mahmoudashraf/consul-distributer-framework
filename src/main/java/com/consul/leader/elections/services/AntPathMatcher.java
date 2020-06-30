@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class AntPathMatcher {
+
+
     public static final AntPathMatcher INSTANCE = new AntPathMatcher();
 
     /** Default path separator: "/" */
@@ -17,9 +19,14 @@ public class AntPathMatcher {
 
     private String pathSeparator = DEFAULT_PATH_SEPARATOR;
 
+    private AntPathMatcher() {
+
+    }
+
     /**
      * Set the path separator to use for pattern parsing. Default is "/", as in Ant.
      */
+
     public void setPathSeparator(String pathSeparator) {
         this.pathSeparator = pathSeparator != null ? pathSeparator : DEFAULT_PATH_SEPARATOR;
     }

@@ -10,6 +10,10 @@ import com.consul.leader.elections.dto.ServiceNodeInfo;
 import com.orbitz.consul.model.catalog.CatalogService;
 
 public class Helper {
+    private Helper() {
+
+    }
+
     public static boolean matches(String pattern, String target) {
         if (Objects.equals(pattern, target)) {
             return true;
@@ -57,8 +61,9 @@ public class Helper {
 
 
     public static boolean isLocalService(CatalogService catalogService, ServiceNodeInfo service) {
-        if (catalogService.getAddress().equals(service.getIPAddress())
-                && catalogService.getServicePort() == service.getPort())
+        if (/*
+             * catalogService.getAddress().equals(service.getIPAddress()) &&
+             */ catalogService.getServicePort() == service.getPort())
             return true;
 
         return false;

@@ -408,11 +408,12 @@ public class LeaderObserver {
         return serviceDefList;
     }
 
-    public List<ServiceDefinition> getServentListByTag() throws ConsulException {
+    public List<ServiceDefinition> getServentListByTag(String tageName, String tagValue)
+            throws ConsulException {
 
         return leaderUtil.getServents().stream()
-                .filter(value2 -> (value2.getMetadata().get("worker") != null
-                        && value2.getMetadata().get("worker").equals("worker1")))
+                .filter(value2 -> (value2.getMetadata().get(tageName) != null
+                        && value2.getMetadata().get(tageName).equals(tagValue)))
                 .collect(Collectors.toList());
     }
 
