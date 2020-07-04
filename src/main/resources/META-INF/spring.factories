@@ -7,4 +7,5 @@ com.consul.leader.elections.leader.LeaderObserver,\
 com.consul.leader.elections.leader.LeaderUtil,\
 com.consul.leader.elections.annotation.AuthAspect,\
 com.consul.leader.elections.annotation.OnLeaderCheckImpl,\
-com.consul.leader.elections.services.ConsulServiceDiscovery
+com.consul.leader.elections.services.ConsulServiceDiscovery,\
+com.consul.leader.distributed.processing.DistributedProcesssingHelper

@@ -1,8 +1,10 @@
 package com.consul.leader.elections.leader;
 
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
+import com.consul.leader.distributed.processing.DistributedOperation;
 import com.consul.leader.elections.event.IfGrantedLeaderEvent;
 import com.consul.leader.elections.event.NewLeaderConfiguredEvent;
 
@@ -43,5 +45,5 @@ public interface Watcher {
 
     public void newLeaderNotification();
 
-
+    public void receiveProcessingResult(List<DistributedOperation> operations);
 }
