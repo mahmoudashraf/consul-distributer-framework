@@ -33,6 +33,8 @@ public interface Watcher {
 
     @EventListener(NewLeaderConfiguredEvent.class)
     public default void receivenewLeaderNotification() {
+        if (LeaderObserver.getInstance().getServiceNode().isLeader())
+            logger.info("I'm not Leader Right Now ,New Leader is selected");
         LeaderObserver.getInstance().getServiceNode().setIsCurrentlyLeaderValue(false);
         newLeaderNotification();
     }
