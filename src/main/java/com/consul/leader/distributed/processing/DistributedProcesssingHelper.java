@@ -9,14 +9,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import com.consul.leader.elections.leader.LeaderObserver;
 import com.consul.leader.elections.leader.Watcher;
 import com.consul.leader.elections.services.ServiceDefinition;
 
-@Component
-@Configuration
 public class DistributedProcesssingHelper {
 
     public DistributedProcesssingHelper() {
@@ -25,24 +21,21 @@ public class DistributedProcesssingHelper {
 
     private Map<String, ServiceDefinition> services = new Hashtable<String, ServiceDefinition>();
     private List<DistributedOperation> operations = new ArrayList<DistributedOperation>();
-    private BlockingQueue<String> serviceQueue = new LinkedBlockingQueue<>();
+    private BlockingQueue<ServiceDefinition> serviceQueue = new LinkedBlockingQueue<>();
     private Lock lock = new ReentrantLock();
-    private static int numberOfCompletedRequests = 0;
+    private int numberOfCompletedRequests = 0;
     CountDownLatch latch = new CountDownLatch(1);
 
     public int getNumberOfCompletedRequests() {
         return numberOfCompletedRequests;
     }
 
-    public Map<String, ServiceDefinition> getServices() {
-        return services;
-    }
 
-    public void addServiceToMap(ServiceDefinition serviceDef) {
+    private void addServiceToMap(ServiceDefinition serviceDef) {
         this.services.put(serviceDef.getMetadata().get("service.id"), serviceDef);
     }
 
-    public ServiceDefinition getService(String serviceId) {
+    private ServiceDefinition getService(String serviceId) {
         return this.services.get(serviceId);
     }
 
@@ -52,6 +45,7 @@ public class DistributedProcesssingHelper {
     }
 
     public void completeOperation(int leaderRequestId, ServantResponse servantResponse) {
+        System.out.println("Class Id" + this);
         DistributedOperation operation = this.operations.get(leaderRequestId);
         operation.setServantResponse(servantResponse);
         setFreeServiceToQueue(operation.getLeaderRequest().getTagertServiceID());
@@ -67,11 +61,15 @@ public class DistributedProcesssingHelper {
     }
 
     public void setFreeServiceToQueue(String serviceId) {
-        this.serviceQueue.add(serviceId);
+        this.serviceQueue.add(this.getService(serviceId));
     }
 
     public ServiceDefinition pickFreeService() {
-        return this.services.get(this.serviceQueue.remove());
+        return this.serviceQueue.remove();
+    }
+
+    public int getServiceQueueSize() {
+        return this.serviceQueue.size();
     }
 
     public int getTotalNumberOfOperaions() {
@@ -95,6 +93,7 @@ public class DistributedProcesssingHelper {
                 .filter(service -> service != null).forEach(service -> {
                     if (service != null)
                         this.addServiceToMap(service);
+                    this.serviceQueue.add(service);
                 });
     }
 
