@@ -51,7 +51,7 @@ public class AllCases {
         testUtil.publishWebServerInitializedEventCustom();
         // wait until listner get consul values
         testUtil.waitForMillisecond(10000);
-        testUtil.waitForMillisecond(40000);
+        // testUtil.waitForMillisecond(40000);
         assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), true);
         assertEquals(testUtil.leaderToJson(testUtil.getLeaderObserver().getCurrentLeader()),
@@ -59,7 +59,7 @@ public class AllCases {
         testUtil.getLeaderObserver().getCurrentLeader().reset();
         testUtil.deleteLeaderFromConsul();
         testUtil.getLeaderObserver().removeListner();
-        testUtil.waitForMillisecond(50000);
+        // testUtil.waitForMillisecond(50000);
     }
 
     public void startUpWithValidLeaderValues() throws LeaderNotPresented {
@@ -70,7 +70,7 @@ public class AllCases {
 
         // wait until listner get consul values
         testUtil.waitForMillisecond(10000);
-        testUtil.waitForMillisecond(40000);
+        // testUtil.waitForMillisecond(40000);
         assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), false);
         assertEquals(testUtil.leaderToJson(testUtil.getLeaderObserver().getCurrentLeader()),
@@ -78,7 +78,7 @@ public class AllCases {
         testUtil.getLeaderObserver().getCurrentLeader().reset();
         testUtil.deleteLeaderFromConsul();
         testUtil.getLeaderObserver().removeListner();
-        testUtil.waitForMillisecond(50000);
+        // testUtil.waitForMillisecond(50000);
     }
 
 
@@ -90,7 +90,7 @@ public class AllCases {
         testUtil.setLeaderInConsul(leader);
         testUtil.publishWebServerInitializedEventCustom();
         // wait until listner get consul values
-        testUtil.waitForMillisecond(40000);
+        testUtil.waitForMillisecond(10000);
         assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), true);
         assertEquals(testUtil.leaderToJson(testUtil.getLeaderObserver().getCurrentLeader()),
@@ -98,7 +98,7 @@ public class AllCases {
         testUtil.getLeaderObserver().getCurrentLeader().reset();
         testUtil.deleteLeaderFromConsul();
         testUtil.getLeaderObserver().removeListner();
-        testUtil.waitForMillisecond(50000);
+        // testUtil.waitForMillisecond(50000);
     }
 
     @AfterAll
