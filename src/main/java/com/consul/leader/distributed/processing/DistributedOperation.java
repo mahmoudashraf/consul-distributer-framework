@@ -2,19 +2,19 @@ package com.consul.leader.distributed.processing;
 
 public class DistributedOperation {
 
-    private LeaderRequest leaderRequest;
+    private ServantRequest leaderRequest;
     private ServantResponse servantResponse;
 
-    public DistributedOperation(LeaderRequest leaderRequest) {
+    public DistributedOperation(ServantRequest leaderRequest) {
         super();
         this.leaderRequest = leaderRequest;
     }
 
-    public LeaderRequest getLeaderRequest() {
+    public ServantRequest getServantRequest() {
         return leaderRequest;
     }
 
-    public void setLeaderRequest(LeaderRequest leaderRequest) {
+    public void setLeaderRequest(ServantRequest leaderRequest) {
         this.leaderRequest = leaderRequest;
     }
 

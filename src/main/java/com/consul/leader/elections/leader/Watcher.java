@@ -45,5 +45,5 @@ public interface Watcher {
 
     public void newLeaderNotification();
 
-    public void receiveProcessingResult(List<DistributedOperation> operations);
+    public Object receiveProcessingResult(List<DistributedOperation> operations);
 }

@@ -13,9 +13,9 @@ import com.consul.leader.elections.leader.LeaderObserver;
 import com.consul.leader.elections.leader.Watcher;
 import com.consul.leader.elections.services.ServiceDefinition;
 
-public class DistributedProcesssingHelper {
+public class DistributedProcessor {
 
-    public DistributedProcesssingHelper() {
+    public DistributedProcessor() {
         this.lock.lock();
     }
 
@@ -40,7 +40,7 @@ public class DistributedProcesssingHelper {
     }
 
 
-    public void addNewOperation(LeaderRequest request) {
+    public void addNewOperation(ServantRequest request) {
         this.operations.add(new DistributedOperation(request));
     }
 
@@ -48,7 +48,7 @@ public class DistributedProcesssingHelper {
         System.out.println("Class Id" + this);
         DistributedOperation operation = this.operations.get(leaderRequestId);
         operation.setServantResponse(servantResponse);
-        setFreeServiceToQueue(operation.getLeaderRequest().getTagertServiceID());
+        setFreeServiceToQueue(operation.getServantRequest().getTagertServiceID());
         this.numberOfCompletedRequests++;
         System.out.println("getNumberOfCompletedRequests" + this.getNumberOfCompletedRequests());
         if (this.isProcessingCompleted()) {
@@ -65,7 +65,7 @@ public class DistributedProcesssingHelper {
     }
 
     public ServiceDefinition pickFreeService() {
-        return this.serviceQueue.remove();
+        return this.serviceQueue.peek();
     }
 
     public int getServiceQueueSize() {
@@ -82,7 +82,7 @@ public class DistributedProcesssingHelper {
 
     public void reset() {
         this.operations.clear();
-        LeaderRequest.resetIDGenerator();
+        ServantRequest.resetIDGenerator();
         numberOfCompletedRequests = 0;
 
     }
@@ -105,7 +105,7 @@ public class DistributedProcesssingHelper {
                 });
     }
 
-    public void waitReceiveProcessingResult(Watcher watcher) {
+    public Object waitAndReceiveProcessingResult(Watcher watcher) {
         System.out.println("start waiting lock");
 
         while (!this.isProcessingCompleted()) {
@@ -116,6 +116,6 @@ public class DistributedProcesssingHelper {
             }
         }
         System.out.println("enf waiting lock");
-        watcher.receiveProcessingResult(this.operations);
+        return watcher.receiveProcessingResult(this.operations);
     }
 }

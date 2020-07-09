@@ -60,8 +60,9 @@ public class WatcherTest implements Watcher {
     }
 
     @Override
-    public void receiveProcessingResult(List<DistributedOperation> operations) {
+    public Object receiveProcessingResult(List<DistributedOperation> operations) {
         // TODO Auto-generated method stub
+        return new Object();
 
     }
 

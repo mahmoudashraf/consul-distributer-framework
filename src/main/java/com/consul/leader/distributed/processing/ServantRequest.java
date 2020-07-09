@@ -1,13 +1,13 @@
 package com.consul.leader.distributed.processing;
 
-public class LeaderRequest {
+public class ServantRequest {
 
     private int requestID;
     private String tagertServiceID;
 
     private static int IdGenerator = 0;
 
-    public LeaderRequest(String tagertServiceID) {
+    public ServantRequest(String tagertServiceID) {
         super();
         this.tagertServiceID = tagertServiceID;
         this.requestID = IdGenerator;
