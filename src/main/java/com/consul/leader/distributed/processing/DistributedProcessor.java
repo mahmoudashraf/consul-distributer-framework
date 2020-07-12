@@ -138,4 +138,17 @@ public class DistributedProcessor {
         System.out.println("enf waiting lock");
         return watcher.processDistributedResults(this.operations);
     }
+
+    public void waitDistributedResults() {
+        System.out.println("start waiting lock");
+        while (!this.isProcessingCompleted()) {
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("enf waiting lock");
+    }
+
 }
