@@ -5,13 +5,13 @@ public class ServantRequest {
     private int requestID;
     private String tagertServiceID;
 
-    private static int IdGenerator = 0;
 
-    public ServantRequest(String tagertServiceID) {
+    public ServantRequest() {}
+
+    public ServantRequest(String tagertServiceID, DistributedProcessor processor) {
         super();
         this.tagertServiceID = tagertServiceID;
-        this.requestID = IdGenerator;
-        IdGenerator++;
+        this.requestID = processor.generateNewRequestId();
     }
 
     public int getRequestID() {
@@ -26,7 +26,4 @@ public class ServantRequest {
         this.tagertServiceID = tagertServiceID;
     }
 
-    public static void resetIDGenerator() {
-        IdGenerator = 0;
-    }
 }

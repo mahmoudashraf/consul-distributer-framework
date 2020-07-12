@@ -29,17 +29,19 @@ public class DistributedProcessor {
     private volatile int numberOfCompletedRequests = 0;
     private CountDownLatch latch = new CountDownLatch(1);
 
+    private int IdGenerator = -1;
+
     public int getNumberOfCompletedRequests() {
         return numberOfCompletedRequests;
     }
 
 
     private void addServiceToMap(ServiceDefinition serviceDef) {
-        this.services.put(serviceDef.getMetadata().get("service.id"), serviceDef);
+        this.getServices().put(serviceDef.getMetadata().get("service.id"), serviceDef);
     }
 
     private ServiceDefinition getService(String serviceId) {
-        return this.services.get(serviceId);
+        return this.getServices().get(serviceId);
     }
 
 
@@ -47,9 +49,9 @@ public class DistributedProcessor {
         this.operations.add(new DistributedOperation(request));
     }
 
-    public void completeOperation(int leaderRequestId, ServantResponse servantResponse)
+    synchronized public void completeOperation(int leaderRequestId, ServantResponse servantResponse)
             throws MissingRequestIdInResponseException {
-        this.numberOfCompletedRequests++;
+        incrementCompletedOperations();
         if (leaderRequestId == -1) {
             throw new MissingRequestIdInResponseException();
         }
@@ -60,6 +62,11 @@ public class DistributedProcessor {
         if (this.isProcessingCompleted()) {
             latch.countDown();
         }
+    }
+
+
+    protected void incrementCompletedOperations() {
+        this.numberOfCompletedRequests++;
     }
 
     public boolean isProcessingCompleted() {
@@ -97,7 +104,6 @@ public class DistributedProcessor {
 
     public void reset() {
         this.operations.clear();
-        ServantRequest.resetIDGenerator();
         numberOfCompletedRequests = 0;
 
     }
@@ -149,6 +155,16 @@ public class DistributedProcessor {
             }
         }
         System.out.println("enf waiting lock");
+    }
+
+
+    public Map<String, ServiceDefinition> getServices() {
+        return services;
+    }
+
+    public int generateNewRequestId() {
+        IdGenerator++;
+        return IdGenerator;
     }
 
 }
