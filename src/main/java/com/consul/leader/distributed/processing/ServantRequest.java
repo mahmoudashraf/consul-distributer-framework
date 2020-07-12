@@ -8,10 +8,10 @@ public class ServantRequest {
 
     public ServantRequest() {}
 
-    public ServantRequest(String tagertServiceID, DistributedProcessor processor) {
+    public ServantRequest(String tagertServiceID, ConsulDistributer distributer) {
         super();
         this.tagertServiceID = tagertServiceID;
-        this.requestID = processor.generateNewRequestId();
+        this.requestID = distributer.generateNewRequestId();
     }
 
     public int getRequestID() {

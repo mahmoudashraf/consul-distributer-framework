@@ -16,9 +16,9 @@ import com.consul.leader.elections.leader.LeaderObserver;
 import com.consul.leader.elections.leader.Watcher;
 import com.consul.leader.elections.services.ServiceDefinition;
 
-public class DistributedProcessor {
+public class ConsulDistributer {
 
-    public DistributedProcessor() {
+    public ConsulDistributer() {
         this.lock.lock();
     }
 
