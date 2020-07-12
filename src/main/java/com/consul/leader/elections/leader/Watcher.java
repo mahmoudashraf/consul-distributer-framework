@@ -1,6 +1,7 @@
 package com.consul.leader.elections.leader;
 
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -45,5 +46,5 @@ public interface Watcher {
 
     public void newLeaderNotification();
 
-    public Object receiveProcessingResult(List<DistributedOperation> operations);
+    public Optional<?> processDistributedResults(List<DistributedOperation> operations);
 }

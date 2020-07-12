@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import com.consul.leader.elections.exception.MissingRequestIdInResponseException;
+import com.consul.leader.elections.exception.NoAvailableServantsException;
 import com.consul.leader.elections.leader.LeaderObserver;
 import com.consul.leader.elections.leader.Watcher;
 import com.consul.leader.elections.services.ServiceDefinition;
@@ -23,8 +26,8 @@ public class DistributedProcessor {
     private List<DistributedOperation> operations = new ArrayList<DistributedOperation>();
     private BlockingQueue<ServiceDefinition> serviceQueue = new LinkedBlockingQueue<>();
     private Lock lock = new ReentrantLock();
-    private int numberOfCompletedRequests = 0;
-    CountDownLatch latch = new CountDownLatch(1);
+    private volatile int numberOfCompletedRequests = 0;
+    private CountDownLatch latch = new CountDownLatch(1);
 
     public int getNumberOfCompletedRequests() {
         return numberOfCompletedRequests;
@@ -44,12 +47,15 @@ public class DistributedProcessor {
         this.operations.add(new DistributedOperation(request));
     }
 
-    public void completeOperation(int leaderRequestId, ServantResponse servantResponse) {
-        System.out.println("Class Id" + this);
+    public void completeOperation(int leaderRequestId, ServantResponse servantResponse)
+            throws MissingRequestIdInResponseException {
+        this.numberOfCompletedRequests++;
+        if (leaderRequestId == -1) {
+            throw new MissingRequestIdInResponseException();
+        }
         DistributedOperation operation = this.operations.get(leaderRequestId);
         operation.setServantResponse(servantResponse);
         setFreeServiceToQueue(operation.getServantRequest().getTagertServiceID());
-        this.numberOfCompletedRequests++;
         System.out.println("getNumberOfCompletedRequests" + this.getNumberOfCompletedRequests());
         if (this.isProcessingCompleted()) {
             latch.countDown();
@@ -65,7 +71,16 @@ public class DistributedProcessor {
     }
 
     public ServiceDefinition pickFreeService() {
-        return this.serviceQueue.peek();
+        ServiceDefinition take = null;
+        while (take == null) {
+            try {
+                take = this.serviceQueue.take();
+                return take;
+            } catch (InterruptedException e) {
+
+            }
+        }
+        return take;
     }
 
     public int getServiceQueueSize() {
@@ -87,7 +102,9 @@ public class DistributedProcessor {
 
     }
 
-    public void builServicesList(String tageName, String tagValue) {
+    public void builServicesList(String tageName, String tagValue)
+            throws NoAvailableServantsException {
+
         reset();
         LeaderObserver.getInstance().getServentListByTag(tageName, tagValue).stream()
                 .filter(service -> service != null).forEach(service -> {
@@ -95,6 +112,9 @@ public class DistributedProcessor {
                         this.addServiceToMap(service);
                     this.serviceQueue.add(service);
                 });
+        if (this.serviceQueue.size() <= 0) {
+            throw new NoAvailableServantsException();
+        }
     }
 
     public void builServicesList() {
@@ -105,7 +125,7 @@ public class DistributedProcessor {
                 });
     }
 
-    public Object waitAndReceiveProcessingResult(Watcher watcher) {
+    public Optional<?> waitAndCallMyProcessDistributedResults(Watcher watcher) {
         System.out.println("start waiting lock");
 
         while (!this.isProcessingCompleted()) {
@@ -116,6 +136,6 @@ public class DistributedProcessor {
             }
         }
         System.out.println("enf waiting lock");
-        return watcher.receiveProcessingResult(this.operations);
+        return watcher.processDistributedResults(this.operations);
     }
 }

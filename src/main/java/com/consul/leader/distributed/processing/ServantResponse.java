@@ -1,10 +1,11 @@
 package com.consul.leader.distributed.processing;
 
 public class ServantResponse {
-    private long requestID;
+    private long requestID = -1;
 
+    public ServantResponse() {
 
-    public ServantResponse() {}
+    }
 
     public ServantResponse(long requestID) {
         this.requestID = requestID;
