@@ -61,7 +61,7 @@ public class WatcherTest implements Watcher {
     }
 
     @Override
-    public Optional<?> processDistributedResults(List<DistributedOperation> operations) {
+    public Optional<?> processDistributedOperations(List<DistributedOperation> operations) {
         // TODO Auto-generated method stub
         return Optional.of(new Object());
 

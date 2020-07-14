@@ -142,7 +142,7 @@ public class ConsulDistributer {
             }
         }
         System.out.println("enf waiting lock");
-        return watcher.processDistributedResults(this.operations);
+        return watcher.processDistributedOperations(this.operations);
     }
 
     public void waitDistributedResults() {
