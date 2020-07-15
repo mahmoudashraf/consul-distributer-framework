@@ -90,7 +90,7 @@ public class AllCases {
         testUtil.setLeaderInConsul(leader);
         testUtil.publishWebServerInitializedEventCustom();
         // wait until listner get consul values
-        testUtil.waitForMillisecond(40000);
+        testUtil.waitForMillisecond(10000);
         assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), true);
         assertEquals(testUtil.leaderToJson(testUtil.getLeaderObserver().getCurrentLeader()),

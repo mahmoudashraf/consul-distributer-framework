@@ -2,7 +2,9 @@ package com.consul.leader.elections.test;
 
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
+import com.consul.leader.distributed.processing.DistributedOperation;
 import com.consul.leader.elections.annotation.OnLeader;
 import com.consul.leader.elections.annotation.OnServent;
 import com.consul.leader.elections.dto.Leader;
@@ -56,6 +58,13 @@ public class WatcherTest implements Watcher {
 
     private void setLeader(boolean isLeader) {
         this.isLeader = isLeader;
+    }
+
+    @Override
+    public Optional<?> processDistributedOperations(List<DistributedOperation> operations) {
+        // TODO Auto-generated method stub
+        return Optional.of(new Object());
+
     }
 
 

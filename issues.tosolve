@@ -1,3 +1,8 @@
+ rejected from java.util.concurrent.ScheduledThreadPoolExecutor@255bce8e[Terminated, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 6]
+
+
+
+
 should stop acting as leader when consul values is empty
 if session is not valid you can send new event "stopLeader"
 

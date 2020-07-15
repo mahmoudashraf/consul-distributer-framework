@@ -14,7 +14,7 @@ public class SessionHolder implements Runnable {
     private static final String TTL_TEMPLATE = "%ss";
     private Consul client;
     private String id;
-    private LinkedList<Supplier<Boolean>> liveChecks = new LinkedList();
+    private LinkedList<Supplier<Boolean>> liveChecks = new LinkedList<Supplier<Boolean>>();
     private long ttl;
     private boolean shutdown = false;
     private static final Logger logger = LoggerFactory.getLogger(LeaderObserver.class);
