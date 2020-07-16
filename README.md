@@ -1,4 +1,4 @@
-# Consul-Leader-Election
+# Consul-Distributer-Framework
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
 # What is Cosnul Server ?
