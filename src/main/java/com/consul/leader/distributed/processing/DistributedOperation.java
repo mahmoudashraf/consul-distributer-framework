@@ -5,7 +5,7 @@ public class DistributedOperation {
     private ServantRequest leaderRequest;
     private ServantResponse servantResponse;
 
-    public DistributedOperation(ServantRequest leaderRequest) {
+    protected DistributedOperation(ServantRequest leaderRequest) {
         super();
         this.leaderRequest = leaderRequest;
     }
