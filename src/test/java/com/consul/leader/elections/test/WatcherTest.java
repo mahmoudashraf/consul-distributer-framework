@@ -29,7 +29,7 @@ public class WatcherTest implements Watcher {
 
     @OnServent
     public Leader doServent() throws LeaderNotPresented {
-        return getwatcher().getCurrentLeader();
+        return Watcher.getCurrentLeader();
     }
 
     @Override

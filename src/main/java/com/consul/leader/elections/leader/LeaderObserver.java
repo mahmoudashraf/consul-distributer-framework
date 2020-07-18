@@ -389,7 +389,7 @@ public class LeaderObserver {
 
     }
 
-    public Leader getCurrentLeader() throws LeaderNotPresented {
+    protected Leader getCurrentLeader() throws LeaderNotPresented {
         logger.info("Requesting Current Leader");
         if (this.observedLeader == null || this.observedLeader.isEmpty()) {
             logger.info("Current observed leader is empty Requesting New Leader");

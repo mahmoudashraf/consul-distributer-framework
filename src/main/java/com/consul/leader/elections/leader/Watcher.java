@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import com.consul.leader.distributed.processing.DistributedOperation;
+import com.consul.leader.elections.dto.Leader;
 import com.consul.leader.elections.event.IfGrantedLeaderEvent;
 import com.consul.leader.elections.event.NewLeaderConfiguredEvent;
+import com.consul.leader.elections.exception.LeaderNotPresented;
 
 public interface Watcher {
 
@@ -26,6 +28,21 @@ public interface Watcher {
 
     public static boolean isLeader() {
         return LeaderObserver.getInstance().getServiceNode().isLeader();
+    }
+
+    public static Leader getCurrentLeader() {
+        Leader leader = null;
+        while (leader == null) {
+            try {
+                leader = LeaderObserver.getInstance().getCurrentLeader();
+            } catch (LeaderNotPresented e) {
+                // TODO Auto-generated catch block
+                leader = null;
+            }
+        }
+
+        return leader;
+
     }
 
     @EventListener(IfGrantedLeaderEvent.class)

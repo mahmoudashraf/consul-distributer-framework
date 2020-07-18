@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.consul.leader.elections.dto.Leader;
 import com.consul.leader.elections.exception.LeaderNotPresented;
+import com.consul.leader.elections.leader.Watcher;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -52,11 +53,11 @@ public class AllCases {
         // wait until listner get consul values
         testUtil.waitForMillisecond(10000);
         testUtil.waitForMillisecond(40000);
-        assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
+        assertEquals(Watcher.getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), true);
-        assertEquals(testUtil.leaderToJson(testUtil.getLeaderObserver().getCurrentLeader()),
+        assertEquals(testUtil.leaderToJson(Watcher.getCurrentLeader()),
                 testUtil.getLeaderFromConsul());
-        testUtil.getLeaderObserver().getCurrentLeader().reset();
+        Watcher.getCurrentLeader().reset();
         testUtil.deleteLeaderFromConsul();
         testUtil.getLeaderObserver().removeListner();
         testUtil.waitForMillisecond(50000);
@@ -71,11 +72,11 @@ public class AllCases {
         // wait until listner get consul values
         testUtil.waitForMillisecond(10000);
         testUtil.waitForMillisecond(40000);
-        assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
+        assertEquals(Watcher.getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), false);
-        assertEquals(testUtil.leaderToJson(testUtil.getLeaderObserver().getCurrentLeader()),
+        assertEquals(testUtil.leaderToJson(Watcher.getCurrentLeader()),
                 testUtil.getLeaderFromConsul());
-        testUtil.getLeaderObserver().getCurrentLeader().reset();
+        Watcher.getCurrentLeader().reset();
         testUtil.deleteLeaderFromConsul();
         testUtil.getLeaderObserver().removeListner();
         testUtil.waitForMillisecond(50000);
@@ -91,11 +92,11 @@ public class AllCases {
         testUtil.publishWebServerInitializedEventCustom();
         // wait until listner get consul values
         testUtil.waitForMillisecond(10000);
-        assertEquals(testUtil.getLeaderObserver().getCurrentLeader().isEmpty(), false);
+        assertEquals(Watcher.getCurrentLeader().isEmpty(), false);
         assertEquals(watcherTest.isLeader(), true);
-        assertEquals(testUtil.leaderToJson(testUtil.getLeaderObserver().getCurrentLeader()),
+        assertEquals(testUtil.leaderToJson(Watcher.getCurrentLeader()),
                 testUtil.getLeaderFromConsul());
-        testUtil.getLeaderObserver().getCurrentLeader().reset();
+        Watcher.getCurrentLeader().reset();
         testUtil.deleteLeaderFromConsul();
         testUtil.getLeaderObserver().removeListner();
         testUtil.waitForMillisecond(50000);
@@ -104,7 +105,7 @@ public class AllCases {
     @AfterAll
     protected void afterAll() throws LeaderNotPresented {
         testUtil.getLeaderObserver().removeListner();
-        testUtil.getLeaderObserver().getCurrentLeader().reset();
+        Watcher.getCurrentLeader().reset();
     }
 
 

@@ -1,6 +1,5 @@
 package com.consul.leader.distributed.processing;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 import com.consul.leader.elections.exception.MissingRequestIdInResponseException;
 import com.consul.leader.elections.exception.NoAvailableServantsException;
 import com.consul.leader.elections.leader.LeaderObserver;
@@ -19,10 +19,13 @@ import com.consul.leader.elections.services.ServiceDefinition;
 public class ConsulDistributer {
 
     private Map<String, ServiceDefinition> services = new Hashtable<String, ServiceDefinition>();
-    private List<DistributedOperation> operations = new ArrayList<DistributedOperation>();
+    private volatile Map<Integer, DistributedOperation> uncompletedOperations =
+            new Hashtable<Integer, DistributedOperation>();
+    private volatile Map<Integer, DistributedOperation> completedOperations =
+            new Hashtable<Integer, DistributedOperation>();
     private BlockingQueue<ServiceDefinition> serviceQueue = new LinkedBlockingQueue<>();
     private Lock lock = new ReentrantLock();
-    private volatile int numberOfCompletedRequests = 0;
+    // private volatile int numberOfCompletedRequests = 0;
     private CountDownLatch latch = new CountDownLatch(1);
     private CountDownLatch serviceBuildinglatch;
     private int IdGenerator = -1;
@@ -40,24 +43,26 @@ public class ConsulDistributer {
         return this.getServices().get(serviceId);
     }
 
-    public List<DistributedOperation> getOperations() {
-        return this.operations;
+    public List<DistributedOperation> getCompletedOperations() {
+        return this.completedOperations.values().stream().collect(Collectors.toList());
+    }
+
+    public List<DistributedOperation> getUnCompletedOperations() {
+        return this.uncompletedOperations.values().stream().collect(Collectors.toList());
     }
 
     private void addServiceToMap(ServiceDefinition serviceDef) {
-        this.getServices().put(serviceDef.getMetadata().get("service.id"), serviceDef);
+        System.out.println("Here build3");
+        this.services.put(serviceDef.getMetadata().get("service.id"), serviceDef);
+        System.out.println("Here build4");
     }
 
     public void addNewOperation(ServantRequest request) {
-        this.operations.add(new DistributedOperation(request));
+        this.uncompletedOperations.put(request.getRequestID(), new DistributedOperation(request));
     }
 
     public boolean isProcessingCompleted() {
-        return (this.getTotalNumberOfOperaions() == this.numberOfCompletedRequests) ? true : false;
-    }
-
-    protected void incrementCompletedOperations() {
-        this.numberOfCompletedRequests++;
+        return (this.uncompletedOperations.size() == 0) ? true : false;
     }
 
 
@@ -67,12 +72,17 @@ public class ConsulDistributer {
         return this.serviceQueue.size();
     }
 
-    public int getNumberOfCompletedRequests() {
-        return numberOfCompletedRequests;
+    public int getNumberOfCompletedOperations() {
+        return this.completedOperations.size();
     }
 
+    public int getNumberOfUnCompletedOperations() {
+        return this.uncompletedOperations.size();
+    }
+
+
     public int getTotalNumberOfOperaions() {
-        return this.operations.size();
+        return this.completedOperations.size() + this.uncompletedOperations.size();
     }
 
     public Map<String, ServiceDefinition> getServices() {
@@ -94,16 +104,26 @@ public class ConsulDistributer {
     }
 
 
-    synchronized public void completeOperation(int leaderRequestId, ServantResponse servantResponse)
+    synchronized public void completeOperation(int requestId, ServantResponse servantResponse)
             throws MissingRequestIdInResponseException {
-        incrementCompletedOperations();
-        if (leaderRequestId == -1) {
+        if (requestId == -1) {
             throw new MissingRequestIdInResponseException();
         }
-        DistributedOperation operation = this.operations.get(leaderRequestId);
+        /*
+         * this.uncompletedOperations.stream().forEach( op ->
+         * System.out.println("op.getServantRequest()" + op.getServantRequest()));
+         * this.uncompletedOperations.stream().forEach(op -> System.out.println(
+         * "op.getServantRequest().getRequestID()" + op.getServantRequest().getRequestID()));
+         */
+        DistributedOperation operation = this.uncompletedOperations.get(requestId);
+
         operation.setServantResponse(servantResponse);
         setFreeServiceToQueue(operation.getServantRequest().getTagertServiceID());
-        System.out.println("getNumberOfCompletedRequests" + this.getNumberOfCompletedRequests());
+        System.out.println("getNumberOfCompletedRequests" + this.getNumberOfCompletedOperations());
+        // synchronized (operation) {
+        this.completedOperations.put(requestId, operation);
+        this.uncompletedOperations.remove(requestId);
+        // }
         if (this.isProcessingCompleted()) {
             latch.countDown();
         }
@@ -133,17 +153,23 @@ public class ConsulDistributer {
 
     public void builServicesList(String tageName, String tagValue)
             throws NoAvailableServantsException {
+        System.out.println("Here building");
         serviceBuildinglatch = new CountDownLatch(1);
         reset();
         LeaderObserver.getInstance().getServentListByTag(tageName, tagValue).stream()
                 .filter(service -> service != null).forEach(service -> {
                     if (service != null) {
+                        System.out.println("Here building" + service.getHost() + service.getPort());
                         this.addServiceToMap(service);
+                        System.out.println("Here build1");
                         this.serviceQueue.add(service);
+                        System.out.println("Here build2");
                     }
                 });
+        System.out.println("done building");
         serviceBuildinglatch.countDown();
         if (this.serviceQueue.size() <= 0) {
+            System.out.println("ssevice num 0");
             throw new NoAvailableServantsException();
         }
     }
@@ -166,13 +192,9 @@ public class ConsulDistributer {
     }
 
     public Optional<?> waitAndCallMyProcessDistributedResults(Watcher watcher) {
-        System.out.println("start waiting lock");
-
-        while (!this.isProcessingCompleted()) {
-            waitForLatch(this.latch);
-        }
-        System.out.println("enf waiting lock");
-        return watcher.processDistributedOperations(this.operations);
+        waitDistributedResults();
+        return watcher.processDistributedOperations(
+                this.completedOperations.values().stream().collect(Collectors.toList()));
     }
 
     public void waitDistributedResults() {
