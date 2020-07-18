@@ -52,9 +52,9 @@ public class ConsulDistributer {
     }
 
     private void addServiceToMap(ServiceDefinition serviceDef) {
-        System.out.println("Here build3");
+        // System.out.println("Here build3");
         this.services.put(serviceDef.getMetadata().get("service.id"), serviceDef);
-        System.out.println("Here build4");
+        // System.out.println("Here build4");
     }
 
     public void addNewOperation(ServantRequest request) {
@@ -119,7 +119,8 @@ public class ConsulDistributer {
 
         operation.setServantResponse(servantResponse);
         setFreeServiceToQueue(operation.getServantRequest().getTagertServiceID());
-        System.out.println("getNumberOfCompletedRequests" + this.getNumberOfCompletedOperations());
+        // System.out.println("getNumberOfCompletedRequests" +
+        // this.getNumberOfCompletedOperations());
         // synchronized (operation) {
         this.completedOperations.put(requestId, operation);
         this.uncompletedOperations.remove(requestId);
@@ -153,23 +154,24 @@ public class ConsulDistributer {
 
     public void builServicesList(String tageName, String tagValue)
             throws NoAvailableServantsException {
-        System.out.println("Here building");
+        // System.out.println("Here building");
         serviceBuildinglatch = new CountDownLatch(1);
         reset();
         LeaderObserver.getInstance().getServentListByTag(tageName, tagValue).stream()
                 .filter(service -> service != null).forEach(service -> {
                     if (service != null) {
-                        System.out.println("Here building" + service.getHost() + service.getPort());
+                        // System.out.println("Here building" + service.getHost() +
+                        // service.getPort());
                         this.addServiceToMap(service);
-                        System.out.println("Here build1");
+                        // System.out.println("Here build1");
                         this.serviceQueue.add(service);
-                        System.out.println("Here build2");
+                        // System.out.println("Here build2");
                     }
                 });
-        System.out.println("done building");
+        // System.out.println("done building");
         serviceBuildinglatch.countDown();
         if (this.serviceQueue.size() <= 0) {
-            System.out.println("ssevice num 0");
+            // System.out.println("ssevice num 0");
             throw new NoAvailableServantsException();
         }
     }
@@ -198,11 +200,11 @@ public class ConsulDistributer {
     }
 
     public void waitDistributedResults() {
-        System.out.println("start waiting lock");
+        // System.out.println("start waiting lock");
         while (!this.isProcessingCompleted()) {
             waitForLatch(this.latch);
         }
-        System.out.println("end waiting lock");
+        // System.out.println("end waiting lock");
     }
 
 

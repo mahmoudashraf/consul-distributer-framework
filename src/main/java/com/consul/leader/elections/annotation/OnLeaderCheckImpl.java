@@ -19,7 +19,7 @@ public class OnLeaderCheckImpl {
 
     public boolean onLeaderModeCheck() {
         if (Watcher.isLeader()) {
-            logger.info("I'm leader Leader");
+            // logger.info("I'm leader Leader");
             return true;
         }
         logger.info("It's Not Leader");

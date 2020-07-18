@@ -19,7 +19,7 @@ public class AuthAspect {
 
     @Before("@annotation(com.consul.leader.elections.annotation.OnLeader)")
     public void beforeLeader() throws UnsupportedOperationOnServentMode {
-        logger.trace("Before method announated (OnLader)");
+        // logger.trace("Before method announated (OnLader)");
         if (!onleaderCheck.onLeaderModeCheck()) {
             throw new UnsupportedOperationOnServentMode();
         }
