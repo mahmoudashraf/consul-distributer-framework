@@ -47,6 +47,7 @@ public interface Watcher {
 
     @EventListener(IfGrantedLeaderEvent.class)
     public default void receiveOnGrantedLeaderNotification() {
+        logger.info("I'm Leader Right Now");
         LeaderObserver.getInstance().getServiceNode().setIsCurrentlyLeaderValue(true);
         onGrantedLeaderNotification();
     }

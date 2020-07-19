@@ -34,12 +34,12 @@ public class WatcherTest implements Watcher {
 
     @Override
     public void onGrantedLeaderNotification() {
-        setLeader(true);
+        // setLeader(true);
     }
 
     @Override
     public void newLeaderNotification() {
-        setLeader(false);
+        // setLeader(false);
     }
 
     @OnLeader
@@ -52,13 +52,11 @@ public class WatcherTest implements Watcher {
         getwatcher().getServiceNode().enableLeadership();
     }
 
-    public boolean isLeader() {
-        return isLeader;
-    }
-
-    private void setLeader(boolean isLeader) {
-        this.isLeader = isLeader;
-    }
+    /*
+     * public boolean isLeader() { return isLeader; }
+     * 
+     * private void setLeader(boolean isLeader) { this.isLeader = isLeader; }
+     */
 
     @Override
     public Optional<?> processDistributedOperations(List<DistributedOperation> operations) {
