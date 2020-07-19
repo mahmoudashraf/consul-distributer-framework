@@ -141,6 +141,9 @@ public class LeaderObserver {
                     } else {
                         logger.info("I'm still leader");
                     }
+                } // TODO Reset ObserverLeader
+                else {
+                    this.observedLeader.reset();
                 }
             } else {
                 this.observedLeader.reset();
@@ -297,10 +300,12 @@ public class LeaderObserver {
                 logger.info("New Decoded Values is not present");
                 updateLeaderFromConsul();
                 if (this.observedLeader.isEmpty()
-                        || !isLeaderSessionValid(this.observedLeader.getSessionId())) {
-                    this.observedLeader.reset();
-                    leutil.releaseLockForService(serviceNode.getServiceName());
-                    logger.info("Released");
+                /* || !isLeaderSessionValid(this.observedLeader.getSessionId()) */) {
+                    /*
+                     * this.observedLeader.reset();
+                     * leutil.releaseLockForService(serviceNode.getServiceName());
+                     * logger.info("Released");
+                     */
                     startObservation(
                             TIME_TO_WAIT_LEADER_AFTER_INTIALIZATION_BEFORE_VOLUNTEERING_IN_SECONDS
                                     * 1000);

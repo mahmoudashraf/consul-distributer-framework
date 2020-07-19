@@ -19,9 +19,9 @@ import com.consul.leader.elections.services.ServiceDefinition;
 public class ConsulDistributer {
 
     private Map<String, ServiceDefinition> services = new Hashtable<String, ServiceDefinition>();
-    private volatile Map<Integer, DistributedOperation> uncompletedOperations =
+    private Map<Integer, DistributedOperation> uncompletedOperations =
             new Hashtable<Integer, DistributedOperation>();
-    private volatile Map<Integer, DistributedOperation> completedOperations =
+    private Map<Integer, DistributedOperation> completedOperations =
             new Hashtable<Integer, DistributedOperation>();
     private BlockingQueue<ServiceDefinition> serviceQueue = new LinkedBlockingQueue<>();
     private Lock lock = new ReentrantLock();
@@ -104,7 +104,7 @@ public class ConsulDistributer {
     }
 
 
-    synchronized public void completeOperation(int requestId, ServantResponse servantResponse)
+    public void completeOperation(int requestId, ServantResponse servantResponse)
             throws MissingRequestIdInResponseException {
         if (requestId == -1) {
             throw new MissingRequestIdInResponseException();
