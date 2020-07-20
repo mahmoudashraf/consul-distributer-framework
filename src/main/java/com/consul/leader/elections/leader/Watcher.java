@@ -38,6 +38,7 @@ public interface Watcher {
             } catch (LeaderNotPresented e) {
                 // TODO Auto-generated catch block
                 leader = null;
+                LeaderObserver.getInstance().waitForMillisecond(15000);
             }
         }
 

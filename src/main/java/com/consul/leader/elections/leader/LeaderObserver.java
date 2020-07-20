@@ -243,7 +243,7 @@ public class LeaderObserver {
     }
 
 
-    private void waitForMillisecond(long time) {
+    protected void waitForMillisecond(long time) {
         try {
 
             Thread.sleep(time);

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
@@ -19,10 +20,10 @@ import com.consul.leader.elections.services.ServiceDefinition;
 public class ConsulDistributer {
 
     private Map<String, ServiceDefinition> services = new Hashtable<String, ServiceDefinition>();
-    private Map<Integer, DistributedOperation> uncompletedOperations =
-            new Hashtable<Integer, DistributedOperation>();
-    private Map<Integer, DistributedOperation> completedOperations =
-            new Hashtable<Integer, DistributedOperation>();
+    private ConcurrentHashMap<Integer, DistributedOperation> uncompletedOperations =
+            new ConcurrentHashMap<Integer, DistributedOperation>();
+    private ConcurrentHashMap<Integer, DistributedOperation> completedOperations =
+            new ConcurrentHashMap<Integer, DistributedOperation>();
     private BlockingQueue<ServiceDefinition> serviceQueue = new LinkedBlockingQueue<>();
     private Lock lock = new ReentrantLock();
     // private volatile int numberOfCompletedRequests = 0;
